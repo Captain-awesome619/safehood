@@ -1,0 +1,135 @@
+'use client';
+import React, { useEffect, useState } from 'react';
+import Image from "next/image";
+import logo from '../assets/logo.svg'
+import info from '../assets/informationsafetybacked.svg'
+import { Dialog } from 'radix-ui';
+import line from '../assets/line.svg'
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+
+export default function Home() {
+  const [count, setCount] = useState<boolean>(false);
+ 
+  function Account() {
+    setCount(!count)
+  }
+  const navigate = useRouter()
+  function Move() {
+    navigate.push('/dashboard')
+  }
+  return (
+    <div className="lg:grid flex-col  gap-[1.5rem] overflow-x-hidden p-0 pb-[1rem]  lg:px-[2rem] bg-primary1   h-screen  ">
+     <div className="flex justify-between items-center p-[1rem] lg:px-0 pb-[5rem] lg:pb-0  ">
+     <div className="lg:pl-[4rem] pl-0   ">
+     <Image 
+     src={logo}
+     height={50}
+     width={50}
+     alt="logo"
+     className="lg:w-[200px] lg:h-[100px] w-[100px] h-[50px]"
+     />
+ </div>
+     <div className="flex gap-[1rem]  lg:gap-[2rem] justify-center  ">
+     <h3 className="lg:text-[24px] text-[17px] cursor-pointer font-[400] text-primary2 duration-500 hover:text-secondary">About</h3>
+     <h3  className="lg:text-[24px] text-[17px] cursor-pointer font-[400] text-primary2 duration-500 hover:text-secondary">Contact</h3>
+     </div>
+     </div>
+     <div className="flex lg:flex-row flex-col items-center justify-center ">
+     <div className="bg-[url('/images/background1.svg')] bg-no-repeat lg:w-[1065px] lg:h-[620px] mr-[1rem] m-auto w-screen h-[500px]">
+     </div>
+     <div className="flex flex-col gap-[1rem] lg:gap-[0.2rem]  lg:ml-[-26%] mt-[-90%] md:mt-[-50%] lg:mt-0">
+    
+     <Image
+     src={info}
+     width={50}
+     height={50}
+     alt="info"
+     className="lg:w-[600px] lg:h-[300px] w-[250px] h-[150px] lg:flex hidden"
+     />
+
+<h3 className="lg:hidden flex flex-col text-primary2 text-[50px] font-[600] text-center">
+Information<br></br> Backed<br></br> Safety.
+</h3>
+
+<Dialog.Root>
+    <div className="flex justify-center items-center pl-[0rem] lg:pl-[7rem] lg:items-center">
+    <Dialog.Trigger asChild>
+
+     <button className="px-[2rem] hover:text-secondary hover:bg-primary1 duration-500 py-[1rem] text-primary1 rounded-4xl bg-secondary cursor-pointer">
+     <h4 className="lg:text-[24px]  font-[500]">Sign up/Log in</h4>
+     </button>
+     </Dialog.Trigger>
+    
+     <Dialog.Overlay >
+     <motion.div
+   className="fixed w-screen inset-0 duration-1000 backdrop-blur-md   "
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5 }}
+  />
+     </Dialog.Overlay>
+     
+    
+  
+     <motion.div
+     initial={{ opacity: 0 }}
+     animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+     >
+     { count === false ?
+       
+     <Dialog.Content aria-description='form' className='  h-max p-[2rem] lg:p-[3rem]   fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex flex-col items-center justify-center gap-[1.5rem] bg-secondary  rounded-3xl ' >
+     
+          <Dialog.Title className='hidden'>Settings</Dialog.Title>
+     <div className='flex flex-col gap-[0.5rem] py-[0.5rem] lg:py-0'>
+     <input placeholder='Email Address' type='email' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1   h-[65px] w-[300px]' />
+     <input placeholder='Create a password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+     <input placeholder='Confirm your password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+     </div>
+     <button onClick={Account} className='cursor-pointer bg-primary1 rounded-2xl px-[1.5rem] py-[0.5rem] text-white'>
+Sign up
+     </button>
+     <Image 
+     src={line}
+     height={50}
+     width={320}
+     alt="logo"
+     />
+     <h3 className='text-primary1 font-[500] '>Or already have an account? <span className='text-white cursor-pointer' onClick={Account}>Sign in</span></h3>
+     </Dialog.Content>
+   
+     :
+    
+     <Dialog.Content aria-description='form' className=' h-max p-[2rem] lg:p-[3rem]  fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center gap-[1.5rem] bg-secondary  rounded-3xl ' >
+     
+     <Dialog.Title className='hidden'>Settings</Dialog.Title>
+<div className='flex flex-col gap-[0.5rem] py-[0.5rem] lg:py-0'>
+<input placeholder='Email Address' type='email' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+<input placeholder='Enter your password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+</div>
+<button className='cursor-pointer bg-primary1 rounded-2xl px-[1.5rem] py-[0.5rem] text-white' onClick={Move}>
+Sign in
+</button>
+<Image 
+src={line}
+height={50}
+width={320}
+alt="logo"
+/>
+<h3 className='text-primary1 font-[500] '>Don't have an account? <span className='text-white cursor-pointer' onClick={Account}>Sign up</span></h3>
+
+</Dialog.Content>
+
+}
+</motion.div>
+
+     </div>
+     </Dialog.Root>
+     </div>
+    
+     </div>
+    </div>
+  );
+}

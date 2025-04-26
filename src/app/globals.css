@@ -1,0 +1,37 @@
+@import url('./styles/font.css');
+@import "tailwindcss";
+
+
+@theme {
+  --color-primary1: #0D3575 ;
+ --color-secondary: #CDE0FF;
+  --color-primary2: #FFFFFF;  
+  --color-class1: #FF3A3A;
+  --color-class2: #E98C00;
+  --color-class3: #FFEA00;
+  --color--class4: #F695FF;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  @apply font-sans;
+
+}

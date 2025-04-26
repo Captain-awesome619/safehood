@@ -1,0 +1,116 @@
+'use client'
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { GiHamburgerMenu } from "react-icons/gi"
+import { IoMdClose } from "react-icons/io"
+import Feed from '../components/Feed'
+import LiveFeed from '../components/LiveFeed'
+import Chats from '../components/Chats'
+import Report from '../components/Report'
+import Logo from '../../assets/logo2.svg'
+import { RxAvatar } from "react-icons/rx";
+import Profile from '../components/profile'
+export default function DashboardLayout() {
+  const [activePage, setActivePage] = useState<string>('Profile')
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  // Prevent background scrolling when sidebar is open
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  }, [sidebarOpen])
+
+  return (
+    <div className="flex h-screen w-full  overflow-hidden bg-[url('/images/background2.svg')] bg-cover bg-bottom pt-[3rem]">
+      {/* Sidebar for large screens */}
+      <div className="hidden md:flex fixed top-0 left-0 h-full  z-30 flex-col p-4 pt-[0rem]">
+      <Image 
+     src={Logo}
+     height={50}
+     width={50}
+     alt="logo"
+     className="lg:w-[200px] lg:h-[100px] w-[100px] h-[50px] mb-[2rem]"
+     />
+        <nav className="flex flex-col gap-6 text-gray-700">
+          <button onClick={() => setActivePage('Feed')} className={`text-left ${activePage === 'Feed' ?'text-white cursor-pointer  font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Feed</button>
+          <button onClick={() => setActivePage('Live')} className={`text-left ${activePage === 'Live' ? 'text-white cursor-pointer  font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Live Activities</button>
+          <button onClick={() => setActivePage('Chats')} className={`text-left ${activePage === 'Chats' ?'text-white  cursor-pointer font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Chats</button>
+          <button onClick={() => setActivePage('Report')} className={`text-left ${activePage === 'Report' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Make a report</button>
+        </nav>
+      </div>
+
+      {/* Mobile Overlay with blur */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-opacity-30 backdrop-blur-sm transition-opacity duration-300 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Mobile Sidebar */}
+      <div className={`fixed top-0 left-0 h-full w-64 shadow-md bg-secondary z-50 p-4 transform transition-transform duration-300 md:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex justify-between items-center mb-10">
+        <Image 
+     src={Logo}
+     height={50}
+     width={50}
+     alt="logo"
+     className="lg:w-[200px] lg:h-[100px] w-[100px] h-[50px]"
+     />
+          <IoMdClose size={30} onClick={() => setSidebarOpen(false)} />
+        </div>
+        <nav className="flex flex-col gap-6 text-gray-700">
+          <button onClick={() => { setActivePage('Feed'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Feed' ? 'text-white font-[600] text-[30px]' : 'text-primary1 font-[600] text-[30px]'}`}>Feed</button>
+          <button onClick={() => { setActivePage('Live'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Live' ? 'text-white  font-[600] text-[30px] ' : '   text-primary1 font-[600]  text-[30px]'}`}>Live Activities</button>
+          <button onClick={() => { setActivePage('Chats'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Chats' ? 'text-white  font-[600] text-[30px] ' : '   text-primary1 font-[600]  text-[30px]'}`}>Chats</button>
+          <button onClick={() => { setActivePage('Report'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Report' ? 'text-white  font-[600] text-[30px] ' : '   text-primary1 font-[600]  text-[30px]'}`}>Make a report</button>
+        </nav>
+      </div>
+
+      {/* Main area */}
+      <div className="flex-1 flex flex-col" style={{ marginLeft: '0', marginTop: '0' }}>
+        {/* Topbar */}
+        <header className="fixed top-0 left-0 right-0 h-16 pt-[3rem]  flex items-center justify-between px-4 md:pl-72 md:pr-6 z-20">
+          <div className="flex items-center gap-3 w-full">
+            <GiHamburgerMenu size={30} className="md:hidden" onClick={() => setSidebarOpen(true)} />
+            <div className="flex-grow items-start  justify-start max-w-lg hidden sm:block">
+              <input
+                type="text"
+                placeholder="Search Safehood"
+                className= "text-[#0D357561] w-full bg-secondary border-primary1  border-[7px] rounded-4xl px-4 py-2 focus:outline-none focus:ring-2 "
+              />
+            </div>
+          </div>
+          <div className='rounded-[50%] border-[8px] border-primary1'>
+         <RxAvatar 
+         size={50}
+         color='white'
+          />
+          </div>
+        </header>
+ 
+        {/* Page content */}
+        <main className="flex-1 overflow-y-auto p-4 pt-20 md:pl-72">
+        {activePage === 'Profile' && (
+           <Profile />
+          )}
+          {activePage === 'Feed' && (
+             <Feed />
+          )}
+          {activePage === 'Live' && (
+            <LiveFeed />
+          )}
+          {activePage === 'Chats' && (
+             <Chats />
+          )}
+          {activePage === 'Report' && (
+           <Report />
+          )}
+        </main>
+      </div>
+    </div>
+  )
+}
