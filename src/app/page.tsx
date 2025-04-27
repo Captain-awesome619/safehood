@@ -7,19 +7,88 @@ import { Dialog } from 'radix-ui';
 import line from '../assets/line.svg'
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useGlobalContext } from './context/GlobalProvider';
+import { createUser, getCurrentUser, signIn } from './lib/appwrite';
 
 export default function Home() {
+  const navigate = useRouter()
   const [count, setCount] = useState<boolean>(false);
+  const { loading, isLogged,setUser,setIsLogged,user } = useGlobalContext()
+  const [isSubmitting, setSubmitting] = useState(false);;
+  interface FormState {
+    username: string;
+    email: string;
+    password: string;
+  }
+  
+  const [form, setForm] = useState<FormState>({
+    username: "",
+    email: "",
+    password: "",
+  });
  
+  const submit = async () => {
+    if (form.username === "" || form.email === "" || form.password === "") {
+      alert("Error: Please fill in all fields");
+      return; 
+    }
+    setSubmitting(true);
+    try {
+      console.log('started')
+      const result = await createUser(form.email, form.password, form.username);
+      console.log('here')
+      console.log(form);
+      console.log(result);
+      setUser(result);
+      setIsLogged(true);
+      navigate.push("/dashboard");
+    } catch (error) {
+      console.log(error);
+      alert("There was an error signing in");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  
+  const submit2 = async () => {
+    if (form.email === "" || form.password === "") {
+      alert("Please fill in all fields");
+    }
+
+    setSubmitting(true);
+
+    try {
+      await signIn(form.email, form.password);
+      const result = await getCurrentUser();
+      setUser(result);
+      setIsLogged(true);
+
+      alert("Success User signed in successfully");
+      navigate.push("/dashboard");
+    } catch (error) {
+      alert("Error signing in");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+
   function Account() {
     setCount(!count)
   }
-  const navigate = useRouter()
+  
   function Move() {
     navigate.push('/dashboard')
   }
+  useEffect(() => {
+    if (isLogged && !loading) {
+      navigate.push("/dashboard");
+    }
+  }, [isLogged,loading]); 
   return (
+    
     <div className="lg:grid flex-col  gap-[1.5rem] overflow-x-hidden p-0 pb-[1rem]  lg:px-[2rem] bg-primary1   h-screen  ">
+    
      <div className="flex justify-between items-center p-[1rem] lg:px-0 pb-[5rem] lg:pb-0  ">
      <div className="lg:pl-[4rem] pl-0   ">
      <Image 
@@ -84,11 +153,14 @@ Information<br></br> Backed<br></br> Safety.
      
           <Dialog.Title className='hidden'>Settings</Dialog.Title>
      <div className='flex flex-col gap-[0.5rem] py-[0.5rem] lg:py-0'>
-     <input placeholder='Email Address' type='email' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1   h-[65px] w-[300px]' />
-     <input placeholder='Create a password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
-     <input placeholder='Confirm your password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+     <input  onChange={(e) => setForm({ ...form, email: e.target.value })} value={form.email} placeholder='Email Address' type='email' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1   h-[65px] w-[300px]' />
+     <input onChange={(e) => setForm({ ...form, username: e.target.value })} value={form.username} placeholder='Username' type='string' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1   h-[65px] w-[300px]' />
+     <input onChange={(e) => setForm({ ...form, password: e.target.value })} value={form.password} placeholder='Create a password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+     <input  placeholder='Confirm your password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+    
      </div>
-     <button onClick={Account} className='cursor-pointer bg-primary1 rounded-2xl px-[1.5rem] py-[0.5rem] text-white'>
+    
+     <button onClick={submit} className='cursor-pointer bg-primary1 rounded-2xl px-[1.5rem] py-[0.5rem] text-white'>
 Sign up
      </button>
      <Image 
@@ -106,10 +178,10 @@ Sign up
      
      <Dialog.Title className='hidden'>Settings</Dialog.Title>
 <div className='flex flex-col gap-[0.5rem] py-[0.5rem] lg:py-0'>
-<input placeholder='Email Address' type='email' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
-<input placeholder='Enter your password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+<input onChange={(e) => setForm({ ...form, email: e.target.value })} value={form.email} placeholder='Email Address' type='email' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+<input  onChange={(e) => setForm({ ...form, password: e.target.value })} value={form.password} placeholder='Enter your password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
 </div>
-<button className='cursor-pointer bg-primary1 rounded-2xl px-[1.5rem] py-[0.5rem] text-white' onClick={Move}>
+<button className='cursor-pointer bg-primary1 rounded-2xl px-[1.5rem] py-[0.5rem] text-white' onClick={submit2}>
 Sign in
 </button>
 <Image 

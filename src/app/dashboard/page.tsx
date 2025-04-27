@@ -10,11 +10,17 @@ import Report from '../components/Report'
 import Logo from '../../assets/logo2.svg'
 import { RxAvatar } from "react-icons/rx";
 import Profile from '../components/profile'
+import { signOut } from '../lib/appwrite'
+import { useGlobalContext } from '../context/GlobalProvider'
+import { useRouter } from 'next/navigation'
+import { appwriteConfig } from '../lib/appwrite'
+import { storage } from '../lib/appwrite'
 export default function DashboardLayout() {
+   const navigate = useRouter()
   const [activePage, setActivePage] = useState<string>('Profile')
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  // Prevent background scrolling when sidebar is open
+  const { user, setUser, setIsLogged } = useGlobalContext();
+const [PicUrl, setPicUrl] = useState<string>('');
   useEffect(() => {
     if (sidebarOpen) {
       document.body.style.overflow = 'hidden'
@@ -22,6 +28,33 @@ export default function DashboardLayout() {
       document.body.style.overflow = 'auto'
     }
   }, [sidebarOpen])
+  const logout = async () => {
+    await signOut();
+    setUser(null);
+    setIsLogged(false);
+
+    navigate.push("/");
+  };
+
+ const getProfilePictureUrl = async (fileId: string) => {
+    try {
+      // Use getFileView to get the actual file URL for the image
+      const file = await storage.getFileView(appwriteConfig.storageId, fileId);
+      setPicUrl(file.href); // Set the image URL for rendering
+      return file.href;
+    } catch (error) {
+      console.error("Error fetching profile picture URL:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    if (user?.picture ) {
+      // Only try to fetch the picture if a pic ID exists
+      getProfilePictureUrl(user?.picture);
+    }
+  }, [user?.picture]); // Re-run when the `pic` prop changes
+
 
   return (
     <div className="flex h-screen w-full  overflow-hidden bg-[url('/images/background2.svg')] bg-cover bg-bottom pt-[3rem]">
@@ -39,6 +72,8 @@ export default function DashboardLayout() {
           <button onClick={() => setActivePage('Live')} className={`text-left ${activePage === 'Live' ? 'text-white cursor-pointer  font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Live Activities</button>
           <button onClick={() => setActivePage('Chats')} className={`text-left ${activePage === 'Chats' ?'text-white  cursor-pointer font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Chats</button>
           <button onClick={() => setActivePage('Report')} className={`text-left ${activePage === 'Report' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Make a report</button>
+          <button onClick={logout}>log out</button>
+       
         </nav>
       </div>
 
@@ -67,6 +102,8 @@ export default function DashboardLayout() {
           <button onClick={() => { setActivePage('Live'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Live' ? 'text-white  font-[600] text-[30px] ' : '   text-primary1 font-[600]  text-[30px]'}`}>Live Activities</button>
           <button onClick={() => { setActivePage('Chats'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Chats' ? 'text-white  font-[600] text-[30px] ' : '   text-primary1 font-[600]  text-[30px]'}`}>Chats</button>
           <button onClick={() => { setActivePage('Report'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Report' ? 'text-white  font-[600] text-[30px] ' : '   text-primary1 font-[600]  text-[30px]'}`}>Make a report</button>
+          <button onClick={logout}>log out</button>
+       
         </nav>
       </div>
 
@@ -85,17 +122,25 @@ export default function DashboardLayout() {
             </div>
           </div>
           <div className='rounded-[50%] border-[8px] border-primary1'>
-         <RxAvatar 
-         size={50}
-         color='white'
-          />
+        {user?.picture && PicUrl? (
+                       <Image
+                         width={50}
+                         height={50}
+                         src={PicUrl}
+                         alt='avatar'
+                         className='w-[80px] h-[70px] rounded-[50%]'
+                       />
+                     ) : (
+                       <RxAvatar size={50} color='white' />
+                     )}
           </div>
         </header>
  
         {/* Page content */}
         <main className="flex-1 overflow-y-auto p-4 pt-20 md:pl-72">
+      
         {activePage === 'Profile' && (
-           <Profile />
+           <Profile user={user} id={user?.$id}  pic={user?.picture} />
           )}
           {activePage === 'Feed' && (
              <Feed />
