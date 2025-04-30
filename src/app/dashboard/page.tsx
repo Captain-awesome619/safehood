@@ -15,6 +15,7 @@ import { useGlobalContext } from '../context/GlobalProvider'
 import { useRouter } from 'next/navigation'
 import { appwriteConfig } from '../lib/appwrite'
 import { storage } from '../lib/appwrite'
+import Settings from '../components/Settings'
 
 export default function DashboardLayout() {
    const navigate = useRouter()
@@ -75,13 +76,18 @@ const [PicUrl, setPicUrl] = useState<string>('');
      alt="logo"
      className="lg:w-[200px] lg:h-[100px] w-[100px] h-[50px] mb-[2rem]"
      />
-        <nav className="flex flex-col gap-6 text-gray-700">
+        <nav className="flex flex-col justify-between h-screen gap-6 text-gray-700">
+        <div className='flex flex-col gap-6 '>
           <button onClick={() => setActivePage('Feed')} className={`text-left ${activePage === 'Feed' ?'text-white cursor-pointer  font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Feed</button>
           <button onClick={() => setActivePage('Live')} className={`text-left ${activePage === 'Live' ? 'text-white cursor-pointer  font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Live Activities</button>
           <button onClick={() => setActivePage('Chats')} className={`text-left ${activePage === 'Chats' ?'text-white  cursor-pointer font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Chats</button>
           <button onClick={() => setActivePage('Report')} className={`text-left ${activePage === 'Report' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Make a report</button>
-          <button onClick={logout}>log out</button>
-       
+      
+          </div>
+          <div className='pb-[3rem] flex flex-col gap-[1rem]'>
+          <button onClick={() => setActivePage('Profile')} className={`text-left ${activePage === 'Profile' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Profile</button>
+          <button onClick={() => setActivePage('Settings')} className={`text-left ${activePage === 'Settings' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Settings</button>
+          </div>
         </nav>
       </div>
 
@@ -105,13 +111,18 @@ const [PicUrl, setPicUrl] = useState<string>('');
      />
           <IoMdClose size={30} onClick={() => setSidebarOpen(false)} />
         </div>
-        <nav className="flex flex-col gap-6 text-gray-700">
-          <button onClick={() => { setActivePage('Feed'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Feed' ? 'text-white font-[600] text-[30px]' : 'text-primary1 font-[600] text-[30px]'}`}>Feed</button>
-          <button onClick={() => { setActivePage('Live'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Live' ? 'text-white  font-[600] text-[30px] ' : '   text-primary1 font-[600]  text-[30px]'}`}>Live Activities</button>
-          <button onClick={() => { setActivePage('Chats'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Chats' ? 'text-white  font-[600] text-[30px] ' : '   text-primary1 font-[600]  text-[30px]'}`}>Chats</button>
-          <button onClick={() => { setActivePage('Report'); setSidebarOpen(false); }} className={`text-left ${activePage === 'Report' ? 'text-white  font-[600] text-[30px] ' : '   text-primary1 font-[600]  text-[30px]'}`}>Make a report</button>
-          <button onClick={logout}>log out</button>
-       
+        <nav className="flex flex-col justify-between h-screen gap-6 text-gray-700">
+        <div className='flex flex-col gap-6 '>
+          <button onClick={() => setActivePage('Feed')} className={`text-left ${activePage === 'Feed' ?'text-white cursor-pointer  font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Feed</button>
+          <button onClick={() => setActivePage('Live')} className={`text-left ${activePage === 'Live' ? 'text-white cursor-pointer  font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Live Activities</button>
+          <button onClick={() => setActivePage('Chats')} className={`text-left ${activePage === 'Chats' ?'text-white  cursor-pointer font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Chats</button>
+          <button onClick={() => setActivePage('Report')} className={`text-left ${activePage === 'Report' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Make a report</button>
+      
+          </div>
+          <div className='lg:pb-[3rem] pb-[8rem]  flex flex-col gap-[1rem]'>
+          <button onClick={() => setActivePage('Profile')} className={`text-left ${activePage === 'Profile' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Profile</button>
+          <button onClick={() => setActivePage('Settings')} className={`text-left ${activePage === 'Settings' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Settings</button>
+          </div>
         </nav>
       </div>
 
@@ -169,6 +180,9 @@ const [PicUrl, setPicUrl] = useState<string>('');
           )}
           {activePage === 'Report' && (
            <Report />
+          )}
+          {activePage === 'Settings' && (
+           <Settings />
           )}
         </main>
       </div>

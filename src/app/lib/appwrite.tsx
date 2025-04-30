@@ -137,3 +137,37 @@ export async function getAccount() {
     }
   }
   
+  export async function updateUsername( newUsername :any, documentId: any) {
+    try {
+      const updated = await databases.updateDocument(
+       appwriteConfig.databaseId,
+        appwriteConfig.userCollectionId,
+        documentId,
+        {
+          username: newUsername
+        }
+      );
+  
+      console.log('Username updated:', updated);
+      alert('username updated')
+      return updated;
+    } catch (err) {
+      console.error('Failed to update username:', err);
+      throw err;
+    }
+  }
+
+  export async function deletePost(documentId: string) {
+    try {
+      await databases.deleteDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.postId, // this should be the posts collection ID
+        documentId
+      );
+      console.log('Post deleted successfully');
+      return true;
+    } catch (error) {
+      console.error('Failed to delete post:', error);
+      throw error;
+    }
+  }

@@ -91,8 +91,8 @@ const Feed = () => {
   />
 }
 <div className='grid'>
-<h3 className='text-secondary lg:text-[18px] text-[16px] font-[400]'>{post?.creator?.username}</h3>
-<h3 className='text-secondary text-wrap lg:text-[18px] text-[16px] font-[400] pr-[0.5rem] lg:pr-0'>{formatTime(post?.$createdAt)}</h3>
+<h3 className='text-secondary lg:text-[18px] text-[16px] font-[400]'>Author - {post?.creator?.username}</h3>
+<h3 className='text-secondary text-wrap lg:text-[18px] text-[16px] font-[400] pr-[0.5rem] lg:pr-0'>Time - {formatTime(post?.$createdAt)}</h3>
 </div>
 </div>
 <div className={`w-[22px] h-[22px] rounded-[50%]   ${getColor(post.color)}`}>
@@ -122,7 +122,7 @@ const Feed = () => {
      >
      
        
-     <Dialog.Content aria-description='modal' className=' z-60 w-max  p-[1rem] gap-[1rem]  fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex flex-col items-center justify-center bg-secondary  rounded-3xl ' >
+     <Dialog.Content aria-description='modal' className='border-[1px] border-primary1 z-60 w-max  p-[1rem] gap-[1rem]  fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex flex-col items-center justify-center bg-secondary  rounded-3xl ' >
           <Dialog.Title className='hidden'>Settings</Dialog.Title>
           <div className='flex flex-col gap-[1rem] pb-[1rem]  border-b-[1px] border-primary1 items-center justify-center w-full'>
           <div className='rounded-3xl w-[350px] h-[200px] py-[0.5rem] lg:w-[400px] flex justify-between items-end px-[1rem]' 

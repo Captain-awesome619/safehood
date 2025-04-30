@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { RxAvatar } from "react-icons/rx";
-import { storage, databases, appwriteConfig } from '../lib/appwrite';
+import { deletePost } from '../lib/appwrite';
+import { storage, databases, appwriteConfig,account } from '../lib/appwrite';
 import { ID } from "appwrite";
 import Image from 'next/image';
 import { ClipLoader } from 'react-spinners';
 import { getUserPosts } from '../lib/appwrite';
 import { FaLocationDot } from "react-icons/fa6";
-
+import { Dialog } from 'radix-ui';
+import { motion } from 'framer-motion';
+import { IoIosArrowRoundBack } from "react-icons/io";
+import { Query } from 'appwrite';
+import { updateUsername } from '../lib/appwrite';
+import { IoTrashBin } from "react-icons/io5";
 interface Props {
   user: any;
   id: string;
@@ -18,6 +23,10 @@ const Profile = ({ user, id, pic }: Props) => {
   const [uploading, setUploading] = useState(false);
   const [PicUrl, setPicUrl] = useState<string>('');
   const [data,setdata] = useState <any>()
+  const [profile,setprofile] = useState <any>('')
+  const [documentid,setdocumentid] = useState <any>('')
+  const [username,setusername] = useState <any>('')
+  const [postdoc,setpostdoc] = useState <any>('')
   const getProfilePictureUrl = async (fileId: string) => {
     try {
    
@@ -39,6 +48,7 @@ const Profile = ({ user, id, pic }: Props) => {
           const posts = await getUserPosts(id);
           console.log("Fetched posts:", posts); // check if it's always the same
           setdata(posts);
+          
         } catch (error) {
           console.log("Fetching user posts failed:", error);
         }
@@ -106,9 +116,68 @@ const Profile = ({ user, id, pic }: Props) => {
         return 'bg-gray-500 shadow-[0_0_10px_4px_rgba(107,114,128,0.6)]'; // gray-500
     }
   };
+
+  async function getUserDocumentId() {
+    try {
+      const session = await account.get();
+    
+      const response = await databases.listDocuments(
+        user?.$databaseId,
+        user?.$collectionId,
+        [Query.equal('email', session.email)]
+      );
+  
+      if (response.documents.length > 0) {
+        setdocumentid(response.documents[0].$id)
+        return response.documents[0].$id;
+      } else {
+        throw new Error('User document not found.');
+      }
+    } catch (error) {
+      console.error('Error fetching user document:', error);
+      throw error;
+    }
+  }
+
+ 
+
+  useEffect(() => {
+    if ( user?.$collectionId ) {
+      getUserDocumentId();
+    }
+  }, [user]); 
+
+  const handleUsernameUpdate = async () => {
+    if (username === '') {
+      alert('enter a username')
+      return
+    }
+    else{
+      setUploading(true)
+    try {
+      const updated = await updateUsername(username, documentid);
+      alert('Username successfully updated!');
+      setUploading(false)
+      window.location.reload()
+    } catch (error) {
+      alert('Failed to update username.');
+    }
+  }
+  };
+  const handleDelete = async (postidd :string) => {
+    setUploading(true)
+    try {
+      await deletePost(postidd);
+      alert('Post deleted!');
+      window.location.reload()
+     setUploading(false)
+    } catch (error) {
+      alert('Failed to delete the post.');
+    }
+  };
   return (
     <div className='flex flex-col lg:gap-[3rem] gap-[2rem]  '>
-    
+
       <div className='p-[1rem] lg:p-[0.5rem] lg:gap-0 gap-[1rem] flex flex-col bg-primary1 items-center rounded-3xl lg:w-[600px] lg:h-[300px]'>
         <div className="bg-[url('/images/profilebg.svg')] bg-cover bg-bottom w-full h-[180px] rounded-2xl"></div>
         <div className='flex w-full pb-[0.5rem] lg:pb-0 items-center m-auto justify-between'>
@@ -136,25 +205,101 @@ const Profile = ({ user, id, pic }: Props) => {
             </div>
             <h3 className='font-[600] text-primary2 text-[17px] lg:text-[20px]'>{user?.username}</h3>
           </div>
-          <div className='lg:mt-[-2.2rem]'>
-            <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} className='hidden' />
-            {!file ? (
-              <button
+          
+          <Dialog.Root>
+          <Dialog.Trigger asChild>
+          <button
                 className='cursor-pointer font-[600] bg-secondary rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-primary1'
-                onClick={handleButtonClick}
               >
                 Edit profile
               </button>
-            ) : (
-              <button
-                className='cursor-pointer font-[600] bg-secondary rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-primary1'
-                onClick={handleUpload}
-                disabled={uploading}
+          </Dialog.Trigger>
+            
+ <Dialog.Overlay >
+     <motion.div
+   className="fixed w-screen inset-0 duration-1000 backdrop-blur-md z-50  "
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5 }}
+  />
+     </Dialog.Overlay>
+
+     <Dialog.Content className=' border-[1px] border-primary1   fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-60 rounded-2xl gap-[2rem] w-[300px] h-[300px] lg:w-[350px] bg-secondary lg:h-[300px] p-[2rem] flex flex-col items-center justify-center'>
+ <Dialog.Title className='hidden'>Settings</Dialog.Title>
+{profile === '' ? <>
+
+ <button onClick={()=>setprofile('picture')}
+                className='cursor-pointer font-[600] bg-primary1 rounded-2xl lg:py-[1rem] px-[1rem] lg:px-[1.5rem] py-[1rem] text-primary2'
               >
-                {uploading ?  <ClipLoader size={25}  className='text-primary1' /> : "Upload Picture"}
+                Change picture
               </button>
-            )}
-          </div>
+
+ <button onClick={()=> setprofile('username')}
+                className='cursor-pointer font-[600] bg-primary1 rounded-2xl lg:py-[1rem] px-[1rem] lg:px-[1.5rem] py-[1rem] text-primary2'
+              >
+                Change username
+              </button>
+              </> : ''}
+              {
+                profile === 'picture' ?
+                
+                <div className='grid lg:gap-[2rem] '>
+                  <IoIosArrowRoundBack onClick={()=>setprofile('')} className='text-primary1 cursor-pointer ' size={30} />
+                <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} className='hidden' />
+                {!file ? (
+                  <button
+                    className='cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-secondary'
+                    onClick={handleButtonClick}
+                  >
+                    Choose picture
+                  </button>
+                ) : (
+                  <button
+                    className='cursor-pointer font-[600] bg-secondary rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-primary1'
+                    onClick={handleUpload}
+                    disabled={uploading}
+                  >
+                    {uploading ?  <ClipLoader size={25}  className='text-primary1' /> : "Upload Picture"}
+                  </button>
+                )}
+              </div>   
+                
+                
+                :
+''              }
+
+{
+  profile === 'username' ?
+  <div className='flex flex-col gap-[1rem] px-[2rem]'>
+     <IoIosArrowRoundBack onClick={()=>setprofile('')} className='text-primary1 cursor-pointer ' size={30} />
+     <div>  
+  <input
+  value={username}
+  onChange={(e) => setusername(e.target.value)}
+    placeholder='Enter your new username'
+    type='text'
+    className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]'
+  />
+  </div>  
+  <div>  
+  <button
+                    className='cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-primary2'
+                    onClick={handleUsernameUpdate}
+                    disabled={uploading}
+                  >
+                    {uploading ?  <ClipLoader size={25} color='#CDE0FF'  className='text-secondary' /> : "Confirm change"}
+                  </button>
+</div>
+</div>
+
+  :
+  ''
+}
+     </Dialog.Content>
+          
+          </Dialog.Root>
+
         </div>
       </div>
       <div className='w-max pl-[1rem] pt-[0.5rem] h-[80px] pr-[3rem] bg-primary1 rounded-3xl grid  ' >
@@ -177,10 +322,46 @@ const Profile = ({ user, id, pic }: Props) => {
   <div className={`w-[22px] h-[22px] rounded-[50%]  shadow-[0px_4px_8px_rgba(255,0,0,0.7)] ${getColor(post.color)}`}>
       </div>
       </div>
+      <div className='flex justify-between items-center'>
       <div className='flex items-center gap-[0.2rem]'>
       <FaLocationDot size={15} className='text-primary1' />
       <h4 className='text-primary1 lg:text-[16px] text-[14px] font-[400]'>{post.location}</h4>
       </div>
+      <Dialog.Root>
+      <Dialog.Trigger>
+      <IoTrashBin size={20} className='text-primary1 cursor-pointer' />
+      </Dialog.Trigger>
+      <Dialog.Overlay >
+     <motion.div
+   className="fixed w-screen inset-0 duration-1000 backdrop-blur-md z-50  "
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5 }}
+  />
+     </Dialog.Overlay>
+
+     <Dialog.Content className=' border-[1px] border-primary1   fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-60 rounded-2xl gap-[2rem] w-[350px] h-[300px] lg:w-[350px] bg-secondary lg:h-[300px] p-[1rem] flex flex-col items-center justify-center'>
+ <Dialog.Title className='hidden'>Settings</Dialog.Title>
+ <div className='flex flex-col gap-[2rem] items-center w-full justify-center'>
+ <h3 className='lg:text-[20px] flex items-center justify-center text-[18px] font-[500] w-[100%] text-red-500'>
+  THIS ACTION CANT BE UNDONE
+ </h3>
+ <div>
+ <button
+                    className='cursor-pointer font-[600] bg-red-600 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-primary2'
+                    onClick={() => handleDelete(post.$id)}
+                    disabled={uploading}
+                  >
+                    {uploading ?  <ClipLoader size={25} color='#CDE0FF'  className='text-secondary' /> : "Confirm Delete"}
+                  </button>
+                  
+ </div>
+ </div>
+ </Dialog.Content>
+      </Dialog.Root>
+      </div>
+
       <div  className='lg:h-[200px] lg:w-[100%] w-[100%] h-[130px]' style={{
         backgroundImage: `url(${post.thumbnail})`,
         backgroundSize: 'cover',

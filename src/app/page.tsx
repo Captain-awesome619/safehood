@@ -15,50 +15,107 @@ export default function Home() {
   const [count, setCount] = useState<boolean>(false);
   const { loading, isLogged,setUser,setIsLogged,user } = useGlobalContext()
   const [isSubmitting, setSubmitting] = useState(false);;
+  
   interface FormState {
     username: string;
     email: string;
     password: string;
+    confirmpassword : string
   }
-  
+  interface FormState2 {
+   
+    email: string;
+    password: string;
+
+  }
   const [form, setForm] = useState<FormState>({
     username: "",
     email: "",
     password: "",
+    confirmpassword: "",
   });
- 
+  const [form2, setForm2] = useState<FormState2>({
+   
+    email: "",
+    password: "",
+   
+  });
+
+  const [errors, setErrors] = useState({
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [errors2, setErrors2] = useState({
+    email: '',
+    password: '',
+  });
+
+  const validateAllFields2 = () => {
+    setErrors2({
+      email: !form2.email.includes('@') ? 'Enter your mail' : '',
+    
+      password:
+        form2.password.length < 8 ? ' Enter your 8 character password' : '',
+    });
+  };
+  useEffect(() => {
+    validateAllFields2();
+  }, [form2]);
+  const isFormInvalid2 = Object.values(errors2).some((e) => e !== '');
+
+  // Validation runs every time the form changes
+  useEffect(() => {
+    validateAllFields();
+  }, [form]);
+
+  const validateAllFields = () => {
+    setErrors({
+      email: !form.email.includes('@') ? 'Enter your email address' : '',
+      username: form.username.trim() === '' ? 'Username is required' : '',
+      password:
+        form.password.length < 8 ? 'Password must be at least 8 characters' : '',
+      confirmPassword:
+        form.confirmpassword !== form.password ? 'Passwords do not match' : '',
+    });
+  };
+
+  const isFormInvalid = Object.values(errors).some((e) => e !== '');
+
+
   const submit = async () => {
     if (form.username === "" || form.email === "" || form.password === "") {
       alert("Error: Please fill in all fields");
       return; 
     }
-    setSubmitting(true);
-    try {
-      console.log('started')
-      const result = await createUser(form.email, form.password, form.username);
-      console.log('here')
-      console.log(form);
-      console.log(result);
-      setUser(result);
-      setIsLogged(true);
-      navigate.push("/dashboard");
-    } catch (error) {
-      console.log(error);
-      alert("There was an error signing in");
-    } finally {
-      setSubmitting(false);
-    }
+
+      setSubmitting(true);
+      try {
+        console.log('started')
+        const result = await createUser(form.email, form.password, form.username);
+        console.log('here')
+        console.log(form);
+        console.log(result);
+        setUser(result);
+        setIsLogged(true);
+        navigate.push("/dashboard");
+      } catch (error) {
+        console.log(error);
+        alert("There was an error signing in");
+      } finally {
+        setSubmitting(false);
+      }
+    
   };
   
   const submit2 = async () => {
-    if (form.email === "" || form.password === "") {
+    if (form2.email === "" || form2.password === "") {
       alert("Please fill in all fields");
     }
-
     setSubmitting(true);
-
     try {
-      await signIn(form.email, form.password);
+      await signIn(form2.email, form2.password);
       const result = await getCurrentUser();
       setUser(result);
       setIsLogged(true);
@@ -85,6 +142,12 @@ export default function Home() {
       navigate.push("/dashboard");
     }
   }, [isLogged,loading]); 
+
+  
+  
+ 
+
+
   return (
     
     <div className="lg:grid flex-col  gap-[1.5rem] overflow-x-hidden p-0 pb-[1rem]  lg:px-[2rem] bg-primary1   h-screen  ">
@@ -153,14 +216,62 @@ Information<br></br> Backed<br></br> Safety.
      
           <Dialog.Title className='hidden'>Settings</Dialog.Title>
      <div className='flex flex-col gap-[0.5rem] py-[0.5rem] lg:py-0'>
-     <input  onChange={(e) => setForm({ ...form, email: e.target.value })} value={form.email} placeholder='Email Address' type='email' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1   h-[65px] w-[300px]' />
-     <input onChange={(e) => setForm({ ...form, username: e.target.value })} value={form.username} placeholder='Username' type='string' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1   h-[65px] w-[300px]' />
-     <input onChange={(e) => setForm({ ...form, password: e.target.value })} value={form.password} placeholder='Create a password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
-     <input  placeholder='Confirm your password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
-    
+     <div>
+          <input
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            value={form.email}
+            placeholder='Email Address'
+            type='email'
+        
+            className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]'
+          />
+            {errors.email && <p className='text-red-500 text-sm'>{errors.email}</p>}
+        </div>
+
+        <div>
+          <input
+            onChange={(e) => setForm({ ...form, username: e.target.value })}
+            value={form.username}
+            placeholder='Username'
+       
+            type='text'
+            className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]'
+          />
+             {errors.username && <p className='text-red-500 text-sm'>{errors.username}</p>}
+        </div>
+
+        <div>
+          <input
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            value={form.password}
+            placeholder='Create a password'
+            type='password'
+           
+            className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]'
+          />
+          {errors.password && <p className='text-red-500 text-sm'>{errors.password}</p>}
+        </div>
+
+        <div>
+          <input
+            onChange={(e) => setForm({ ...form, confirmpassword: e.target.value })}
+            value={form.confirmpassword}
+        
+            placeholder='Confirm your password'
+            type='password'
+            className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]'
+          />
+         {errors.confirmPassword && (
+          <p className='text-red-500 text-sm'>{errors.confirmPassword}</p>
+        )}
+        </div>
      </div>
     
-     <button onClick={submit} className='cursor-pointer bg-primary1 rounded-2xl px-[1.5rem] py-[0.5rem] text-white'>
+     <button onClick={submit} disabled={isFormInvalid} className={`  rounded-2xl px-[1.5rem] py-[0.5rem] text-white 
+     ${
+    isFormInvalid ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary1 cursor-pointer'
+  }
+      `}>
 Sign up
      </button>
      <Image 
@@ -178,10 +289,16 @@ Sign up
      
      <Dialog.Title className='hidden'>Settings</Dialog.Title>
 <div className='flex flex-col gap-[0.5rem] py-[0.5rem] lg:py-0'>
-<input onChange={(e) => setForm({ ...form, email: e.target.value })} value={form.email} placeholder='Email Address' type='email' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
-<input  onChange={(e) => setForm({ ...form, password: e.target.value })} value={form.password} placeholder='Enter your password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+<input onChange={(e) => setForm2({ ...form2, email: e.target.value })} value={form2.email} placeholder='Email Address' type='email' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+{errors2.email && <p className='text-red-500 text-sm'>{errors2.email}</p>}
+<input  onChange={(e) => setForm2({ ...form2, password: e.target.value })} value={form2.password} placeholder='Enter your password' type='password' className='text-primary2 focus:ring-0 outline-none border-[1px] px-[1rem] rounded-2xl bg-primary1 h-[65px] w-[300px]' />
+{errors2.password && <p className='text-red-500 text-sm'>{errors2.password}</p>}
 </div>
-<button className='cursor-pointer bg-primary1 rounded-2xl px-[1.5rem] py-[0.5rem] text-white' onClick={submit2}>
+<button  disabled={isFormInvalid2}  className={`  rounded-2xl px-[1.5rem] py-[0.5rem] text-white 
+     ${
+    isFormInvalid2 ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary1 cursor-pointer'
+  }
+      `} onClick={submit2}>
 Sign in
 </button>
 <Image 
