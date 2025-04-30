@@ -29,18 +29,16 @@ const Feed = () => {
    const getColor = (category: string) => {
     switch (category.toLowerCase()) {
       case 'red':
-        return 'bg-red-500 shadow-[0_0_10px_4px_rgba(239,68,68,0.6)]'; // red-500
+        return 'bg-red-500 shadow-[0_0_10px_4px_rgba(239,68,68,0.6)]'; 
       case 'amber':
       case 'yellow':
-        return 'bg-amber-500 shadow-[0_0_10px_4px_rgba(245,158,11,0.6)]'; // amber-500
+        return 'bg-amber-500 shadow-[0_0_10px_4px_rgba(245,158,11,0.6)]'; 
       case 'pink':
-        return 'bg-pink-500 shadow-[0_0_10px_4px_rgba(236,72,153,0.6)]'; // pink-500
+        return 'bg-pink-500 shadow-[0_0_10px_4px_rgba(236,72,153,0.6)]'; 
       default:
-        return 'bg-gray-500 shadow-[0_0_10px_4px_rgba(107,114,128,0.6)]'; // gray-500
+        return 'bg-gray-500 shadow-[0_0_10px_4px_rgba(107,114,128,0.6)]';
     }
   };
-
-  
     const handleShare = async () => {
       if (navigator.share) {
         try {

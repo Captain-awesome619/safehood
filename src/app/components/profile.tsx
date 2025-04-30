@@ -75,7 +75,6 @@ const Profile = ({ user, id, pic }: Props) => {
         ID.unique(),
         file
       );
-    
       await databases.updateDocument(
         appwriteConfig.databaseId,
         appwriteConfig.userCollectionId,

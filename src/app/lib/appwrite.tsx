@@ -24,7 +24,6 @@ client
  export const storage = new Storage(client);
  export const avatars = new Avatars(client);
  export const databases = new Databases(client);
-
 export async function createUser(email: string, password: string, username: string) {
   console.log(username)
     try {
