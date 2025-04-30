@@ -10,7 +10,7 @@ const useAppwrite = (fn:any) => {
       const res = await fn();
       setData(res);
     } catch (error) {
-      alert("Error",);
+      alert("Error");
     } finally {
       setLoading(false);
     }

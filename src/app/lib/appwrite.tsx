@@ -4,8 +4,8 @@ import { Account,
     Databases,
     ID,
     Query,
+    QueryTypesList,
     Storage, } from "appwrite";
-
 
     export const appwriteConfig = {
         endpoint: process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT  as string,
@@ -14,14 +14,12 @@ import { Account,
         databaseId:process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID as string,
         userCollectionId: process.env.NEXT_PUBLIC_APPWRITE_USER_COLLECTION_ID as string,  
         storageId: process.env.NEXT_PUBLIC_APPWRITE_STORAGE_ID as string,
+        postId:process.env.NEXT_PUBLIC_APPWRITE_POSTS_ID as string
       };
-
       const client = new Client();
 client
   .setEndpoint(appwriteConfig.endpoint)
   .setProject(appwriteConfig.projectId)
-  
-
  export const account = new Account(client);
  export const storage = new Storage(client);
  export const avatars = new Avatars(client);
@@ -38,11 +36,8 @@ export async function createUser(email: string, password: string, username: stri
       );
   
       if (!newAccount) throw Error;
-  
       const avatarUrl = avatars.getInitials(username);
-  
       await signIn(email, password);
-  
       const newUser = await databases.createDocument(
         appwriteConfig.databaseId,
         appwriteConfig.userCollectionId,
@@ -51,6 +46,7 @@ export async function createUser(email: string, password: string, username: stri
           accountid: newAccount.$id,
           email: email,
           username: username,
+          avatar: avatarUrl,
         }
       );
       return newUser;
@@ -75,7 +71,7 @@ export async function getAccount() {
   
       return currentAccount;
     } catch (error) {
-      throw new Error('errorr');
+    console.log(error)
     }
   }
   
@@ -110,3 +106,35 @@ export async function getAccount() {
       throw new Error('error signing out');
     }
   }
+
+  export async function getAllPosts() {
+    try {
+      const posts = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postId
+      );
+      
+      return posts.documents;
+    } catch (error) {
+      throw new Error("there was an error getting posts");
+    }
+  }
+
+  export async function getUserPosts(userId: string) {
+    if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+    return
+    }
+  
+    try {
+      const posts = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.postId,
+        [Query.equal("creator", userId)]
+      );
+      return posts.documents;
+    } catch (error) {
+      console.log(error);
+      throw new Error('Error getting user posts');
+    }
+  }
+  

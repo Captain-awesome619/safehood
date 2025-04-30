@@ -8,19 +8,27 @@ import LiveFeed from '../components/LiveFeed'
 import Chats from '../components/Chats'
 import Report from '../components/Report'
 import Logo from '../../assets/logo2.svg'
-import { RxAvatar } from "react-icons/rx";
+import { ClipLoader } from 'react-spinners'
 import Profile from '../components/profile'
 import { signOut } from '../lib/appwrite'
 import { useGlobalContext } from '../context/GlobalProvider'
 import { useRouter } from 'next/navigation'
 import { appwriteConfig } from '../lib/appwrite'
 import { storage } from '../lib/appwrite'
+
 export default function DashboardLayout() {
    const navigate = useRouter()
   const [activePage, setActivePage] = useState<string>('Profile')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { user, setUser, setIsLogged } = useGlobalContext();
+  
 const [PicUrl, setPicUrl] = useState<string>('');
+
+
+
+ 
+ 
+
   useEffect(() => {
     if (sidebarOpen) {
       document.body.style.overflow = 'hidden'
@@ -57,8 +65,8 @@ const [PicUrl, setPicUrl] = useState<string>('');
 
 
   return (
-    <div className="flex h-screen w-full  overflow-hidden bg-[url('/images/background2.svg')] bg-cover bg-bottom pt-[3rem]">
-      {/* Sidebar for large screens */}
+    <div className="flex h-screen w-full  overflow-hidden bg-secondary bg-cover bg-bottom pt-[3rem]">
+     
       <div className="hidden md:flex fixed top-0 left-0 h-full  z-30 flex-col p-4 pt-[0rem]">
       <Image 
      src={Logo}
@@ -122,17 +130,25 @@ const [PicUrl, setPicUrl] = useState<string>('');
             </div>
           </div>
           <div className='rounded-[50%] border-[8px] border-primary1'>
-        {user?.picture && PicUrl? (
-                       <Image
-                         width={50}
-                         height={50}
-                         src={PicUrl}
-                         alt='avatar'
-                         className='w-[80px] h-[70px] rounded-[50%]'
-                       />
-                     ) : (
-                       <RxAvatar size={50} color='white' />
-                     )}
+          {user?.picture && PicUrl ? (
+  PicUrl ? (
+    <Image
+      width={50}
+      height={50}
+      src={PicUrl}
+      alt='avatar'
+      className='lg:w-[90px] lg:h-[90px] rounded-[50%] items-center justify-center'
+    />
+  ) : <ClipLoader size={25} className='text-primary1' />
+) : user?.avatar ? (
+  <Image
+    width={50}
+    height={50}
+    src={user.avatar}
+    alt='avatar'
+    className='lg:w-[50px]  bg-primary1 lg:h-[50px] rounded-[50%] items-center justify-center '
+  />
+) : <ClipLoader size={25}   className='text-primary1'/>}
           </div>
         </header>
  
