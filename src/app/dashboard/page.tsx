@@ -75,7 +75,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
      height={50}
      width={50}
      alt="logo"
-     className="lg:w-[200px] lg:h-[100px] w-[100px] h-[50px] mb-[2rem]"
+     className="lg:w-[200px] lg:h-[100px] w-[80px] h-[50px] mb-[2rem]"
      />
         <nav className="flex flex-col justify-between h-screen gap-6 text-gray-700">
         <div className='flex flex-col gap-6 '>
@@ -101,7 +101,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
       )}
 
       {/* Mobile Sidebar */}
-      <div className={`z-100 fixed top-0 left-0 h-full w-64 shadow-md bg-secondary  p-4 transform transition-transform duration-300 md:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`z-100 fixed top-0 left-0 h-screen w-64 shadow-md bg-secondary  p-4 transform transition-transform duration-300 md:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex justify-between items-center mb-10">
         <Image 
      src={Logo}
@@ -130,7 +130,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
       {/* Main area */}
       <div className="flex-1 flex flex-col" style={{ marginLeft: '0', marginTop: '0' }}>
         {/* Topbar */}
-        <header className="fixed  top-0 left-0 right-0 h-16 lg:pt-[3rem]  flex items-center justify-between px-4 md:pl-72 md:pr-6 z-20">
+        <header className="fixed  top-0 left-0 right-0 pt-[1rem] lg:pt-[3rem]  flex items-center justify-between px-4 md:pl-72 md:pr-6 z-20">
           <div className="flex items-center gap-3 w-full">
             <GiHamburgerMenu size={30} className="md:hidden text-primary1" onClick={() => setSidebarOpen(true)} />
             <div className="flex-grow items-start  justify-start max-w-lg hidden sm:block">
