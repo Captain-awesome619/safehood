@@ -219,7 +219,7 @@ const Profile = ({ user, id, pic }: Props) => {
   />
      </Dialog.Overlay>
 
-     <Dialog.Content className=' border-[1px] border-primary1   fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-60 rounded-2xl gap-[2rem] w-[300px] h-[300px] lg:w-[350px] bg-secondary lg:h-[300px] p-[2rem] flex flex-col items-center justify-center'>
+     <Dialog.Content className=' border-[1px] border-primary1   fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-60 rounded-2xl gap-[2rem] w-[350px] h-[300px] lg:w-[350px] bg-secondary lg:h-[300px] p-[2rem] flex flex-col items-center justify-center'>
  <Dialog.Title className='hidden'>Settings</Dialog.Title>
 {profile === '' ? <>
 
@@ -243,14 +243,14 @@ const Profile = ({ user, id, pic }: Props) => {
                 <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} className='hidden' />
                 {!file ? (
                   <button
-                    className='cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-secondary'
+                    className='cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[1rem] text-secondary'
                     onClick={handleButtonClick}
                   >
                     Choose picture
                   </button>
                 ) : (
                   <button
-                    className='cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-secondary'
+                    className='cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[1rem] text-secondary'
                     onClick={handleUpload}
                     disabled={uploading}
                   >
@@ -278,7 +278,7 @@ const Profile = ({ user, id, pic }: Props) => {
   </div>  
   <div>  
   <button
-                    className='cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-primary2'
+                    className='cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[1rem] text-primary2'
                     onClick={handleUsernameUpdate}
                     disabled={uploading}
                   >
