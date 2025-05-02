@@ -6,18 +6,49 @@ import Image from 'next/image'
 import { Dialog } from 'radix-ui'
 import { motion } from 'framer-motion';
 import { ClipLoader } from 'react-spinners'
+import { storage } from '../lib/appwrite'
+import { appwriteConfig } from '../lib/appwrite'
 const Feed = () => {
   const { data: posts} = useAppwrite(getAllPosts);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
+  const [pictures, setPictures] = useState<any>() // Store pictures here by creator ID
+
    useEffect(() => {
     if (posts) {
-      setIsLoading(true)
-      setData(posts)
-      setIsLoading(false)
+      setIsLoading(true);
+      const fetchCreatorPictures = async () => {
+        const updatedPosts = await Promise.all(
+          posts.map(async (post:any) => {
+            const pictureUrl = await getCreatorPicture(post.creator.picture);
+            
+            // assuming creator has pictureId
+            return {
+              ...post,
+              creator: {
+                ...post.creator,
+                pictureUrl, // Add the picture URL to the creator object
+              },
+            };
+          })
+        );
+        setData(updatedPosts);
+      };
+
+      fetchCreatorPictures().finally(() => setIsLoading(false));
     }
-   }, [posts]); 
-  
+  }, [posts]);
+  const getCreatorPicture = async (pictureId: string) => {
+    try {
+      // Replace this with actual API call to Appwrite to fetch the picture
+       const file = await storage.getFileView(appwriteConfig.storageId, pictureId);
+       setPictures(file.href)
+            return file.href
+    } catch (error) {
+      console.error("Error fetching creator picture", error)
+      return ""
+    }
+  }
    const formatTime = (datetime :string) => {
     return new Date(datetime).toLocaleTimeString('en-US', {
       hour: '2-digit',
@@ -59,8 +90,7 @@ const Feed = () => {
   
    
   return (
-    <div className='grid gap-[2rem]'>
-   
+    <div className='grid gap-[2rem]'>  
    <h2 className='text-[35px] font-[600] text-primary1 '>Live Reports Feed</h2>
    {isLoading == true?
 <ClipLoader size={50} />
@@ -72,12 +102,15 @@ const Feed = () => {
    <Dialog.Trigger asChild>
  <div className='cursor-pointer lg:w-[700px] grid gap-[1rem] h-max px-[1.5rem] lg:px-[3rem] py-[2rem] bg-primary1 rounded-3xl'> 
 <h3 className='text-secondary lg:text-[18px] text-[17px] font-[400]'>{post.category}</h3>
+
 <div className='flex items-center justify-between'>
+
 <div className='flex gap-[0.5rem]'>
+
 {
-  post?.creator?.picture?
+  post?.creator?
   <Image 
-  src={post?.creator?.picture}
+  src={pictures}
   width={100}
   height={55}
   className='rounded-[50%] lg:w-[60px] w-[50px] lg:h-[60px] h-[50px]'
