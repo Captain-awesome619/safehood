@@ -7,9 +7,9 @@ import { Dialog } from 'radix-ui'
 import { motion } from 'framer-motion';
 import { ClipLoader } from 'react-spinners'
 const Feed = () => {
-  const { data: posts, refetch } = useAppwrite(getAllPosts);
+  const { data: posts} = useAppwrite(getAllPosts);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-   const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<any[]>([]);
    useEffect(() => {
     if (posts) {
       setIsLoading(true)

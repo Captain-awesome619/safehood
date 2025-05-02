@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useGlobalContext } from '../context/GlobalProvider'
 import { useRef } from 'react'
 import { IoIosArrowRoundBack } from "react-icons/io";
-import { useRouter } from 'next/navigation'
+
 import { ClipLoader } from 'react-spinners'
 import { createPost } from '../lib/appwrite'
 import { storage } from '../lib/appwrite'
@@ -14,15 +14,15 @@ const Report = () => {
   interface FormState {
     category: string; 
     color: string;
-thumbnail: any;
+    thumbnail: File | null;
 description : string;
 report : string;
 location : string;
-userId : any;
+userId : '';
   }
  const [uploading, setUploading] = useState(false);
-  const [step, setstep] = useState<any>('');
-  const { user, setUser, setIsLogged } = useGlobalContext();
+  const [step, setstep] = useState<number>(1);
+  const { user} = useGlobalContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -31,7 +31,7 @@ userId : any;
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setform((prev:any) => ({ ...prev, thumbnail : file }));
+      setform((prev:FormState) => ({ ...prev, thumbnail : file }));
     }
   };
   const [form, setform] = useState<FormState>({ 
@@ -96,9 +96,8 @@ userId : user?.$id
       // 3. Create the post with the image URL
       const result = await createPost({
         ...form,
-       
       },thumbnailUrl );
-  
+  console.log(result)
       alert('Post uploaded successfully');
       window.location.reload();
     } catch (error) {
@@ -116,7 +115,7 @@ userId : user?.$id
      Make a Report
      </h3>
      <div className='lg:h-max h-max p-[1rem] lg:px-[2rem] lg:py-[3rem] grid gap-[2rem] w-[100%] lg:w-[80%] bg-primary1 rounded-3xl'>
-{ step === ''?
+{ step === 1?
 <div className='grid gap-[2rem]'>
      <h4 className='lg:text-[20px] text-[17px] text-secondary font-[600]'>
      What are you reporting on?
@@ -148,7 +147,7 @@ userId : user?.$id
   step === 2 ?
   <div className='flex justify-between flex-col'>
     <div className='grid gap-[1rem]'>
-       <IoIosArrowRoundBack onClick={()=>setstep('')} className='text-white cursor-pointer ' size={30} />
+       <IoIosArrowRoundBack onClick={()=>setstep(1)} className='text-white cursor-pointer ' size={30} />
     <h4 className='lg:text-[20px] text-[17px] text-primary2 font-[600]'>
     Describe The Incident.
      </h4>

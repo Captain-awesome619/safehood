@@ -1,6 +1,5 @@
 'use client'
 import React from 'react'
-import LiveFeed1 from './pages'
 import dynamic from 'next/dynamic';
 
 

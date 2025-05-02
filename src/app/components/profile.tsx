@@ -26,7 +26,7 @@ const Profile = ({ user, id, pic }: Props) => {
   const [profile,setprofile] = useState <any>('')
   const [documentid,setdocumentid] = useState <any>('')
   const [username,setusername] = useState <any>('')
-  const [postdoc,setpostdoc] = useState <any>('')
+
   const getProfilePictureUrl = async (fileId: string) => {
     try {
    
