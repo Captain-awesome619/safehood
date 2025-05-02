@@ -4,7 +4,6 @@ import { Account,
     Databases,
     ID,
     Query,
-    QueryTypesList,
     Storage, } from "appwrite";
 
     export const appwriteConfig = {
@@ -169,5 +168,27 @@ export async function getAccount() {
     } catch (error) {
       console.error('Failed to delete post:', error);
       throw error;
+    }
+  }
+
+  export async function createPost(form:any) {
+    try {
+      const newPost = await databases.createDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.postId,
+        ID.unique(),
+        {
+          category: form.category,
+          thumbnail: form.thumbnail,
+          description: form.description,
+          report: form.report,
+          color: form.color,
+          location: form.location,
+          creator: form.userId
+        }
+      );
+      return newPost;
+    } catch (error) {
+     console.log(error)
     }
   }

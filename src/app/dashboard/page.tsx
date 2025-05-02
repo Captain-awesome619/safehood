@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation'
 import { appwriteConfig } from '../lib/appwrite'
 import { storage } from '../lib/appwrite'
 import Settings from '../components/Settings'
+import dynamic from 'next/dynamic'
 
 export default function DashboardLayout() {
    const navigate = useRouter()
@@ -94,13 +95,13 @@ const [PicUrl, setPicUrl] = useState<string>('');
       {/* Mobile Overlay with blur */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-opacity-30 backdrop-blur-sm transition-opacity duration-300 md:hidden"
+          className="fixed inset-0  bg-opacity-30 backdrop-blur-sm transition-opacity duration-300 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Mobile Sidebar */}
-      <div className={`fixed top-0 left-0 h-full w-64 shadow-md bg-secondary z-50 p-4 transform transition-transform duration-300 md:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`z-100 fixed top-0 left-0 h-full w-64 shadow-md bg-secondary  p-4 transform transition-transform duration-300 md:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex justify-between items-center mb-10">
         <Image 
      src={Logo}
@@ -111,7 +112,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
      />
           <IoMdClose size={30} onClick={() => setSidebarOpen(false)} />
         </div>
-        <nav className="flex flex-col justify-between h-screen gap-6 text-gray-700">
+        <nav className=" flex flex-col justify-between h-screen gap-6 text-gray-700">
         <div className='flex flex-col gap-6 '>
           <button onClick={() => setActivePage('Feed')} className={`text-left ${activePage === 'Feed' ?'text-white cursor-pointer  font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Feed</button>
           <button onClick={() => setActivePage('Live')} className={`text-left ${activePage === 'Live' ? 'text-white cursor-pointer  font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Live Activities</button>

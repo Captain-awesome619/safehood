@@ -29,14 +29,15 @@ const Feed = () => {
    const getColor = (category: string) => {
     switch (category.toLowerCase()) {
       case 'red':
-        return 'bg-red-500 shadow-[0_0_10px_4px_rgba(239,68,68,0.6)]'; 
+        return 'bg-red-500 shadow-[0_0_10px_4px_rgba(239,68,68,0.6)] text-red-500'; // red-500
       case 'amber':
-      case 'yellow':
-        return 'bg-amber-500 shadow-[0_0_10px_4px_rgba(245,158,11,0.6)]'; 
+        return 'bg-amber-500 shadow-[0_0_10px_4px_rgba(245,158,11,0.6)] text-amber-500'; // amber-500
       case 'pink':
-        return 'bg-pink-500 shadow-[0_0_10px_4px_rgba(236,72,153,0.6)]'; 
+        return 'bg-pink-500 shadow-[0_0_10px_4px_rgba(236,72,153,0.6)] text-pink-500'; // pink-500
+      case 'yellow':
+        return 'bg-yellow-500 shadow-[0_0_10px_4px_rgba(234,179,8,0.6)]text-yrllow-500'; // yellow-500
       default:
-        return 'bg-gray-500 shadow-[0_0_10px_4px_rgba(107,114,128,0.6)]';
+        return 'bg-gray-500 shadow-[0_0_10px_4px_rgba(107,114,128,0.6)] text-gray-500'; // gray-500
     }
   };
     const handleShare = async () => {
@@ -119,9 +120,7 @@ const Feed = () => {
      initial={{ opacity: 0 }}
      animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-     >
-     
-       
+     >   
      <Dialog.Content aria-description='modal' className='border-[1px] border-primary1 z-60 w-max  p-[1rem] gap-[1rem]  fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex flex-col items-center justify-center bg-secondary  rounded-3xl ' >
           <Dialog.Title className='hidden'>Settings</Dialog.Title>
           <div className='flex flex-col gap-[1rem] pb-[1rem]  border-b-[1px] border-primary1 items-center justify-center w-full'>
@@ -155,18 +154,10 @@ const Feed = () => {
           >Share</button>
           </div>
      </Dialog.Content>
-   
-    
-
-
 </motion.div>
-  
-
- 
  </Dialog.Root>
       ))}
     </div>
-
     : 
     <h2 className='flex items-center justify-center text-primary1 lg:text-[25px] text-[18px] font-[600]'  >There are no posts available</h2>
    }
@@ -175,5 +166,4 @@ const Feed = () => {
       </div>
   )
 }
-
 export default Feed
