@@ -112,7 +112,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
      />
           <IoMdClose size={30} onClick={() => setSidebarOpen(false)} />
         </div>
-        <nav className=" flex flex-col justify-between h-screen gap-6 text-gray-700">
+        <nav className=" flex flex-col justify-between  w-64 gap-[1rem] text-gray-700">
         <div className='flex flex-col gap-6 '>
           <button onClick={() => setActivePage('Feed')} className={`text-left ${activePage === 'Feed' ?'text-white cursor-pointer  font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Feed</button>
           <button onClick={() => setActivePage('Live')} className={`text-left ${activePage === 'Live' ? 'text-white cursor-pointer  font-[600] text-[30px] ' : 'cursor-pointer   text-primary1 font-[600]  text-[30px]'}`}>Live Activities</button>
@@ -120,7 +120,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
           <button onClick={() => setActivePage('Report')} className={`text-left ${activePage === 'Report' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Make a report</button>
       
           </div>
-          <div className='lg:pb-[3rem] pb-[8rem]  flex flex-col gap-[1rem]'>
+          <div className=' flex flex-col gap-[1rem] '>
           <button onClick={() => setActivePage('Profile')} className={`text-left ${activePage === 'Profile' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Profile</button>
           <button onClick={() => setActivePage('Settings')} className={`text-left ${activePage === 'Settings' ? 'text-white cursor-pointer font-[600] text-[30px] ' : ' cursor-pointer  text-primary1 font-[600]  text-[30px]'}`}>Settings</button>
           </div>
