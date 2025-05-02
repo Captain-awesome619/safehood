@@ -307,7 +307,7 @@ height={50}
 width={320}
 alt="logo"
 />
-<h3 className='text-primary1 font-[500] '>Don't have an account? <span className='text-white cursor-pointer' onClick={Account}>Sign up</span></h3>
+<h3 className='text-primary1 font-[500]'>Dont have an account? <span className='text-white cursor-pointer' onClick={Account}>Sign up</span></h3>
 
 </Dialog.Content>
 
