@@ -184,7 +184,7 @@ const Profile = ({ user, id, pic }: Props) => {
       height={50}
       src={PicUrl}
       alt='avatar'
-      className='w-[100px] h-[90px] rounded-[50%] items-center justify-center'
+      className='lg:w-[100px] lg:h-[90px] h-[45px] w-[45px] rounded-[50%] items-center justify-center'
     />
   ) : <ClipLoader size={25} className='text-primary1' />
 ) : user?.avatar ? (
@@ -193,7 +193,7 @@ const Profile = ({ user, id, pic }: Props) => {
     height={50}
     src={user.avatar}
     alt='avatar'
-    className='w-[50px] h-[50px] rounded-[50%] items-center justify-center text-black'
+    className='lg:w-[50px] lg:h-[50px] rounded-[50%] w-[45px] h-[45px] items-center justify-center text-black'
   />
 ) : <ClipLoader size={25}  className='text-primary1' />}
             </div>

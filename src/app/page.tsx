@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useGlobalContext } from './context/GlobalProvider';
 import { createUser, getCurrentUser, signIn } from './lib/appwrite';
-
+import { ClipLoader } from 'react-spinners';
 export default function Home() {
   const navigate = useRouter()
   const [count, setCount] = useState<boolean>(false);
@@ -272,7 +272,7 @@ Information<br></br> Backed<br></br> Safety.
     isFormInvalid ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary1 cursor-pointer'
   }
       `}>
-Sign up
+ {isSubmitting ?  <ClipLoader size={25}  className='text-primary1' /> : "Sign up"}
      </button>
      <Image 
      src={line}
@@ -299,7 +299,7 @@ Sign up
     isFormInvalid2 ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary1 cursor-pointer'
   }
       `} onClick={submit2}>
-Sign in
+{isSubmitting ?  <ClipLoader size={25}  className='text-primary1' /> : "Sign in"}
 </button>
 <Image 
 src={line}

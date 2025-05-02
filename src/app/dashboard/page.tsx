@@ -130,9 +130,9 @@ const [PicUrl, setPicUrl] = useState<string>('');
       {/* Main area */}
       <div className="flex-1 flex flex-col" style={{ marginLeft: '0', marginTop: '0' }}>
         {/* Topbar */}
-        <header className="fixed top-0 left-0 right-0 h-16 pt-[3rem]  flex items-center justify-between px-4 md:pl-72 md:pr-6 z-20">
+        <header className="fixed  top-0 left-0 right-0 h-16 lg:pt-[3rem]  flex items-center justify-between px-4 md:pl-72 md:pr-6 z-20">
           <div className="flex items-center gap-3 w-full">
-            <GiHamburgerMenu size={30} className="md:hidden" onClick={() => setSidebarOpen(true)} />
+            <GiHamburgerMenu size={30} className="md:hidden text-primary1" onClick={() => setSidebarOpen(true)} />
             <div className="flex-grow items-start  justify-start max-w-lg hidden sm:block">
               <input
                 type="text"
@@ -149,7 +149,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
       height={50}
       src={PicUrl}
       alt='avatar'
-      className='lg:w-[90px] lg:h-[90px] w-[30px] h-[30px] rounded-[50%] items-center justify-center'
+      className='lg:w-[40px] lg:h-[40px] w-[30px] h-[30px] rounded-[50%] items-center justify-center'
     />
   ) : <ClipLoader size={25} className='text-primary1' />
 ) : user?.avatar ? (
