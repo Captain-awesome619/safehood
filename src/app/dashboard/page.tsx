@@ -149,7 +149,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
       height={50}
       src={PicUrl}
       alt='avatar'
-      className='lg:w-[90px] lg:h-[90px] rounded-[50%] items-center justify-center'
+      className='lg:w-[90px] lg:h-[90px] w-[30px] h-[30px] rounded-[50%] items-center justify-center'
     />
   ) : <ClipLoader size={25} className='text-primary1' />
 ) : user?.avatar ? (
@@ -158,7 +158,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
     height={50}
     src={user.avatar}
     alt='avatar'
-    className='lg:w-[50px]  bg-primary1 lg:h-[50px] rounded-[50%] items-center justify-center '
+    className='lg:w-[50px]  bg-primary1 lg:h-[50px]  rounded-[50%] items-center justify-center '
   />
 ) : <ClipLoader size={25}   className='text-primary1'/>}
           </div>

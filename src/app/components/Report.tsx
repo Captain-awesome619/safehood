@@ -7,7 +7,9 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { useRouter } from 'next/navigation'
 import { ClipLoader } from 'react-spinners'
 import { createPost } from '../lib/appwrite'
-
+import { storage } from '../lib/appwrite'
+import { appwriteConfig } from '../lib/appwrite'
+import { ID} from "appwrite";
 const Report = () => {
   interface FormState {
     category: string; 
@@ -39,7 +41,7 @@ thumbnail: null,
 description : '',
 report : '',
 location : '',
-userId : user.$id
+userId : user?.$id
    })
 
    const handleClick = (category: string, color: string) => {
@@ -63,30 +65,53 @@ userId : user.$id
     setform((prev) => ({ ...prev, [name]: value }));
   };
 
- const submit = async () => {
-     if (form.color === "" || form.category === "" || form.description === ""|| form.thumbnail === null || form.report === ""|| form.location === "" ) {
-       alert("Error: Please fill in all fields");
-       return; 
-     }
- 
-       setUploading(true);
-       try {
-         console.log('started')
-         const result = await createPost(form);
-        alert('post uploaded succesfully')
-        window.location.reload()
-       } catch (error) {
-         console.log(error);
-         alert("There was an error uploading your post");
-       } finally {
-         setUploading(false);
-       }
-     
-   };
-
+  const submit = async () => {
+    if (
+      form.color === '' ||
+      form.category === '' ||
+      form.description === '' ||
+      form.thumbnail === null ||
+      form.report === '' ||
+      form.location === ''
+    ) {
+      alert('Error: Please fill in all fields');
+      return;
+    }
+  
+    setUploading(true);
+  
+    try {
+      console.log('Started');
+  
+      // 1. Upload thumbnail to Appwrite Storage
+      const uploadedFile = await storage.createFile(
+        appwriteConfig.storageId,
+        ID.unique(),
+        form.thumbnail
+      );
+  
+      // 2. Get the preview URL for the uploaded file
+      const thumbnailUrl = storage.getFileView(appwriteConfig.storageId, uploadedFile.$id).href;
+  
+      // 3. Create the post with the image URL
+      const result = await createPost({
+        ...form,
+       
+      },thumbnailUrl );
+  
+      alert('Post uploaded successfully');
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+      alert('There was an error uploading your post');
+    } finally {
+      setUploading(false);
+    }
+  };
+  
   return (
     <div className='grid gap-[2rem]'>
-      {console.log(form)}
+ {console.log(form)}
      <h3 className='lg:text-[30px] text-[27px] text-primary1 font-[600]'>
      Make a Report
      </h3>
@@ -194,30 +219,30 @@ Add Media
       <option value="" disabled  className='lg:text-[20px] text-[17px] text-primary2 font-[600]'>
         Select a location
       </option>
-      <option value="uimaingate">UI Main Gate</option>
-      <option value="facultyofscience">Faculty of Science</option>
-      <option value="facultyofarts">Faculty of Arts</option>
-      <option value="facultyofsocialsciences">Faculty of Social Sciences</option>
-      <option value="facultyofengineering">Faculty of Engineering</option>
-      <option value="universitylibrary">University Library</option>
-      <option value="sportscenter">Sports Center</option>
-      <option value="universitychapel">University Chapel</option>
-      <option value="internationalconferencecenter">International Conference Center</option>
-      <option value="universityguesthouse">University Guest House</option>
-      <option value="studentaffairs">Student Affairs</option>
-      <option value="nnamdiazikiwefoodcourt">Nnamdi Azikiwe Food Court</option>
-      <option value="studentunionbuilding">Student Union Building</option>
-      <option value="independencehall">Independence Hall</option>
-      <option value="mellanbyhall">Mellanby Hall</option>
-      <option value="tedderhall">Tedder Hall</option>
-      <option value="kutihall">Kuti Hall</option>
-      <option value="sultanbellohall">Sultan Bello Hall</option>
-      <option value="nnamdiazikiwehall">Nnamdi Azikiwe Hall</option>
-      <option value="queenelizabethhall">Queen Elizabeth Hall</option>
-      <option value="queenidiahall">Queen Idia Hall</option>
-      <option value="obafemiawolowohall">Obafemi Awolowo Hall</option>
-      <option value="abdulsalamiabubakarhall">Abdulsalami Abubakar Hall</option>
-      <option value="adetowunogunsheyehall">Adetowun Ogunsheye Hall</option>
+      <option value="UI Main Gate">UI Main Gate</option>
+      <option value="Faculty of Science">Faculty of Science</option>
+      <option value="Faculty of Arts">Faculty of Arts</option>
+      <option value="Faculty of Socialsciences">Faculty of Social Sciences</option>
+      <option value="Faculty of Engineering">Faculty of Engineering</option>
+      <option value="University Library">University Library</option>
+      <option value="Sports Center">Sports Center</option>
+      <option value="University Chapel">University Chapel</option>
+      <option value="International Conferencecenter">International Conference Center</option>
+      <option value="University Guesthouse">University Guest House</option>
+      <option value="Student Affairs">Student Affairs</option>
+      <option value="Nnamdiazikiwe Foodcourt">Nnamdi Azikiwe Food Court</option>
+      <option value="Studentunion Building">Student Union Building</option>
+      <option value="Independence Hall">Independence Hall</option>
+      <option value="Mellanby Hall">Mellanby Hall</option>
+      <option value="Tedder Hall">Tedder Hall</option>
+      <option value="Kuti Hall">Kuti Hall</option>
+      <option value="Sultan Bello Hall">Sultan Bello Hall</option>
+      <option value="Nnamdi Azikiwe Hall">Nnamdi Azikiwe Hall</option>
+      <option value="Queen Elizabeth hall">Queen Elizabeth Hall</option>
+      <option value="Queen Idia Hall">Queen Idia Hall</option>
+      <option value="Obafemi Awolowo Hall">Obafemi Awolowo Hall</option>
+      <option value="Abdul Salami Abubakar Hall">Abdulsalami Abubakar Hall</option>
+      <option value="Adetowun Ogunsheye Hall">Adetowun Ogunsheye Hall</option>
     </select>
     <div className='ml-auto'>
     <button
@@ -237,5 +262,4 @@ Add Media
     </div>
   )
 }
-
 export default Report

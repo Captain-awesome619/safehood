@@ -18,6 +18,7 @@ const [uploading , setUploading] = useState<boolean>(false)
       };
   return (
     <div className='grid gap-[2rem]'>
+      {}
       <div>
       <button
                     className='cursor-pointer font-[600]  bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-primary2'

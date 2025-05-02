@@ -250,7 +250,7 @@ const Profile = ({ user, id, pic }: Props) => {
                   </button>
                 ) : (
                   <button
-                    className='cursor-pointer font-[600] bg-secondary rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-primary1'
+                    className='cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-secondary'
                     onClick={handleUpload}
                     disabled={uploading}
                   >
@@ -357,11 +357,12 @@ const Profile = ({ user, id, pic }: Props) => {
       </div>
 
       <div  className='lg:h-[200px] lg:w-[100%] w-[100%] h-[130px]' style={{
-        backgroundImage: `url(${post.thumbnail})`,
+        backgroundImage: `url(${post?.thumbnail})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
        
       }}>
+       
       </div>
       <div className='grid gap-[rem]'>
       <h2 className='text-primary1 lg:text-[25px] text-[18px] font-[600]'>{post.description}</h2>

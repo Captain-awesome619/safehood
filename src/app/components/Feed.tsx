@@ -60,6 +60,7 @@ const Feed = () => {
    
   return (
     <div className='grid gap-[2rem]'>
+   
    <h2 className='text-[35px] font-[600] text-primary1 '>Live Reports Feed</h2>
    {isLoading == true?
 <ClipLoader size={50} />

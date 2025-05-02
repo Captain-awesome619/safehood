@@ -171,7 +171,7 @@ export async function getAccount() {
     }
   }
 
-  export async function createPost(form:any) {
+  export async function createPost(form:any,thumbnailUrl:any) {
     try {
       const newPost = await databases.createDocument(
         appwriteConfig.databaseId,
@@ -179,7 +179,7 @@ export async function getAccount() {
         ID.unique(),
         {
           category: form.category,
-          thumbnail: form.thumbnail,
+          thumbnail: thumbnailUrl,
           description: form.description,
           report: form.report,
           color: form.color,
@@ -187,8 +187,10 @@ export async function getAccount() {
           creator: form.userId
         }
       );
+      
       return newPost;
     } catch (error) {
+ 
      console.log(error)
     }
   }
