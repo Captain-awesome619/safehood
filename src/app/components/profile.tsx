@@ -366,7 +366,7 @@ const Profile = ({ user, id, pic }: Props) => {
       </div>
       <div className='grid gap-[rem]'>
       <h2 className='text-primary1 lg:text-[25px] text-[18px] font-[600]'>{post.description}</h2>
-      <h2 className='text-primary1 lg:text-[16px] text-[14px] font-[400]'>{post.description}</h2>
+      <h2 className='text-primary1 lg:text-[16px] text-[14px] font-[400]'>{post.report}</h2>
       </div>
       </div>
 ))}
