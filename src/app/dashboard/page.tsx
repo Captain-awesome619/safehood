@@ -59,10 +59,11 @@ const [PicUrl, setPicUrl] = useState<string>('');
   };
 
   useEffect(() => {
-    if (user ) {
+    if (user?.picture ) {
+      // Only try to fetch the picture if a pic ID exists
       getProfilePictureUrl(user?.picture);
     }
-  }, [user]); // Re-run when the `pic` prop changes
+  }, [user?.picture]); // Re-run when the `pic` prop changes
 
 
   return (
@@ -141,7 +142,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
             </div>
           </div>
           <div className='rounded-[50%] border-[8px] border-primary1'>
-          { PicUrl ? (
+          {user?.picture && PicUrl ? (
   PicUrl ? (
     <Image
       width={50}
@@ -151,7 +152,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
       className='lg:w-[40px] lg:h-[40px] w-[30px] h-[30px] rounded-[50%] items-center justify-center'
     />
   ) : <ClipLoader size={25} className='text-primary1' />
-) : user?.avatar ? (
+) : user?  (
   <Image
     width={50}
     height={50}
