@@ -53,8 +53,6 @@ userId : user?.$id
     console.log({ category, color });
     setstep(2);
   };
-
-
   const handleLocationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setform((prev) => ({ ...prev, location: e.target.value }));
   };
@@ -64,7 +62,6 @@ userId : user?.$id
     const { name, value } = e.target;
     setform((prev) => ({ ...prev, [name]: value }));
   };
-
   const submit = async () => {
     if (
       form.color === '' ||

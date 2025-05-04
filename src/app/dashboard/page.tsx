@@ -20,7 +20,7 @@ import dynamic from 'next/dynamic'
 
 export default function DashboardLayout() {
    const navigate = useRouter()
-  const [activePage, setActivePage] = useState<string>('Profile')
+  const [activePage, setActivePage] = useState<string>('Feed')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { user, setUser, setIsLogged } = useGlobalContext();
   
