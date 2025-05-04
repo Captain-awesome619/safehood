@@ -59,15 +59,14 @@ const [PicUrl, setPicUrl] = useState<string>('');
   };
 
   useEffect(() => {
-    if (user?.picture ) {
-      // Only try to fetch the picture if a pic ID exists
+    if (user ) {
       getProfilePictureUrl(user?.picture);
     }
-  }, [user?.picture]); // Re-run when the `pic` prop changes
+  }, [user]); // Re-run when the `pic` prop changes
 
 
   return (
-    <div className="flex h-screen w-full  overflow-hidden bg-secondary bg-cover bg-bottom pt-[3rem]">
+    <div className="flex h-max pb-[1rem] lg:pb-0 w-full  overflow-hidden bg-secondary bg-cover bg-bottom pt-[3rem]">
      
       <div className="hidden md:flex fixed top-0 left-0 h-full  z-30 flex-col p-4 pt-[0rem]">
       <Image 
@@ -142,7 +141,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
             </div>
           </div>
           <div className='rounded-[50%] border-[8px] border-primary1'>
-          {user?.picture && PicUrl ? (
+          { PicUrl ? (
   PicUrl ? (
     <Image
       width={50}
