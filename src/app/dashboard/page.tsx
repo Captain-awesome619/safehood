@@ -67,7 +67,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
 
 
   return (
-    <div className="flex h-max pb-[1rem] lg:pb-0 w-full  overflow-hidden bg-secondary bg-cover bg-bottom pt-[3rem]">
+    <div className="flex h-screen pb-[1rem] lg:pb-0 w-full  overflow-hidden bg-secondary bg-cover bg-bottom pt-[3rem]">
      
       <div className="hidden md:flex fixed top-0 left-0 h-full  z-30 flex-col p-4 pt-[0rem]">
       <Image 
