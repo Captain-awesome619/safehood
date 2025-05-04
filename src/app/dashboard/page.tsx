@@ -63,7 +63,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
       // Only try to fetch the picture if a pic ID exists
       getProfilePictureUrl(user?.picture);
     }
-  }, [user?.picture]); // Re-run when the `pic` prop changes
+  }, [user]); // Re-run when the `pic` prop changes
 
 
   return (
@@ -102,7 +102,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
 
       {/* Mobile Sidebar */}
       <div className={`z-100 fixed top-0 left-0 h-screen w-64 shadow-md bg-secondary  p-4 transform transition-transform duration-300 md:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex justify-between items-center w-max ">
         <Image 
      src={Logo}
      height={50}
