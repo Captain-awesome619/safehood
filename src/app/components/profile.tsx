@@ -238,7 +238,7 @@ const Profile = ({ user, id, pic }: Props) => {
               {
                 profile === 'picture' ?
                 
-                <div className='grid lg:gap-[2rem] '>
+                <div className='grid gap-[1rem]  '>
                   <IoIosArrowRoundBack onClick={()=>setprofile('')} className='text-primary1 cursor-pointer ' size={30} />
                 <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} className='hidden' />
                 {!file ? (
