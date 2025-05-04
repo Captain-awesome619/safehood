@@ -102,7 +102,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
 
       {/* Mobile Sidebar */}
       <div className={`z-100 fixed top-0 left-0 h-screen w-64 shadow-md bg-secondary  p-4 transform transition-transform duration-300 md:hidden ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex justify-between items-center w-max ">
+        <div className="flex justify-between items-center mb-10 ">
         <Image 
      src={Logo}
      height={50}
@@ -110,7 +110,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
      alt="logo"
      className="lg:w-[200px] lg:h-[100px] w-[100px] h-[50px]"
      />
-          <IoMdClose size={30} onClick={() => setSidebarOpen(false)} />
+          <IoMdClose size={30} onClick={() => setSidebarOpen(false)} className='text-primary1' />
         </div>
         <nav className=" flex flex-col justify-between  w-64 gap-[1rem] text-gray-700">
         <div className='flex flex-col gap-6 '>
