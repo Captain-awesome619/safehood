@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import { ClipLoader } from 'react-spinners'
 import { storage } from '../lib/appwrite'
 import { appwriteConfig } from '../lib/appwrite'
+import star from '../../assets/verified.svg'
 const Feed = () => {
   const { data: posts} = useAppwrite(getAllPosts);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -130,8 +131,19 @@ const Feed = () => {
 <h3 className='text-secondary text-wrap lg:text-[18px] text-[16px] font-[400] pr-[0.5rem] lg:pr-0'>Time - {formatTime(post?.$createdAt)}</h3>
 </div>
 </div>
+<div className='flex items-center justify-center gap-[0.6rem]'>
+   {post.verified === true ?
+      <Image
+      src={star}
+      height={40}
+      width={40}
+      alt='verified'
+      />
+    :  
+    ''}
 <div className={`w-[22px] h-[22px] rounded-[50%]   ${getColor(post.color)}`}>
       </div>
+</div>
 </div>
 <div className='bg-secondary rounded-3xl grid gap-[0.2rem] w-[100%] h-max pt-[1rem] lg:pb-[2rem] pb-[2rem] px-[1.5rem] lg:px-[2rem]'>
 <h3 className='text-primary1 lg:text-[25px] text-[18px] font-[600]'>{post.description}</h3>
@@ -177,7 +189,18 @@ const Feed = () => {
           <h3 className='font-[500] text-secondary lg:text-[17px] text-[14px]'>Author-{post?.creator?.username}</h3>
           <h3 className='font-[500] text-secondary lg:text-[17px] text-[14px]'>{formatTime(post?.$createdAt)}</h3>
           </div>
+ <div className='flex items-center gap-[0.5rem]'>
           <h2 className='font-[600] text-secondary lg:text-[20px] text-[16px]'>{post.description}</h2>
+            {post.verified === true ?
+      <Image
+      src={star}
+      height={20}
+      width={20}
+      alt='verified'
+      />
+    :  
+    ''}
+</div>
           <h4 className='font-[400] text-secondary lg:text-[17px] text-[14px]'>{post.report}</h4>
           </div>
           

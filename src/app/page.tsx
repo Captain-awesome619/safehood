@@ -299,7 +299,7 @@ Information<br></br> Backed<br></br> Safety.
     isFormInvalid2 ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary1 cursor-pointer'
   }
       `} onClick={submit2}>
-{isSubmitting ?  <ClipLoader size={25}  className='text-primary1' /> : "Sign in"}
+{isSubmitting ?  <ClipLoader size={25}  color='white' className='text-primary1' /> : "Sign in"}
 </button>
 <Image 
 src={line}

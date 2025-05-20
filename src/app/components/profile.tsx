@@ -12,6 +12,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { Query } from 'appwrite';
 import { updateUsername } from '../lib/appwrite';
 import { IoTrashBin } from "react-icons/io5";
+import star from '../../assets/verified.svg'
 interface Props {
   user: any;
   id: string;
@@ -29,7 +30,6 @@ const Profile = ({ user, id, pic }: Props) => {
 
   const getProfilePictureUrl = async (fileId: string) => {
     try {
-   
       const file = await storage.getFileView(appwriteConfig.storageId, fileId);
       setPicUrl(file.href); 
       return file.href;
@@ -140,7 +140,6 @@ const Profile = ({ user, id, pic }: Props) => {
       getUserDocumentId();
     }
   }, [user]); 
-
   const handleUsernameUpdate = async () => {
     if (username === '') {
       alert('enter a username')
@@ -312,7 +311,19 @@ const Profile = ({ user, id, pic }: Props) => {
       {data?.map((post:any, index:number) => (
  <div className='grid rounded-3xl bg-secondary gap-[1rem] lg:gap-[1.5rem] py-[1rem] px-[2rem] w-[100%]  lg:w-[500px] ' key={post.$id || index}>
          <div className='flex items-center justify-between'>
+          <div className='flex gap-[0.3rem] items-center'>
   <h3 className='text-primary1 lg:text-[18px] text-[17px] font-[600]' >{post.category}</h3>
+   {post.verified === true ?
+      <Image
+      src={star}
+      height={30}
+      width={30}
+      alt='verified'
+      />
+    :  
+    
+    ''}
+  </div>
   <div className={`w-[22px] h-[22px] rounded-[50%]  shadow-[0px_4px_8px_rgba(255,0,0,0.7)] ${getColor(post.color)}`}>
       </div>
       </div>
@@ -322,9 +333,11 @@ const Profile = ({ user, id, pic }: Props) => {
       <h4 className='text-primary1 lg:text-[16px] text-[14px] font-[400]'>{post.location}</h4>
       </div>
       <Dialog.Root>
+       
       <Dialog.Trigger>
       <IoTrashBin size={20} className='text-primary1 cursor-pointer' />
       </Dialog.Trigger>
+   
       <Dialog.Overlay >
      <motion.div
    className="fixed w-screen inset-0 duration-1000 backdrop-blur-md z-50  "

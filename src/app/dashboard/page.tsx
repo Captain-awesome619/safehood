@@ -26,11 +26,6 @@ export default function DashboardLayout() {
   
 const [PicUrl, setPicUrl] = useState<string>('');
 
-
-
- 
- 
-
   useEffect(() => {
     if (sidebarOpen) {
       document.body.style.overflow = 'hidden'
@@ -38,19 +33,12 @@ const [PicUrl, setPicUrl] = useState<string>('');
       document.body.style.overflow = 'auto'
     }
   }, [sidebarOpen])
-  const logout = async () => {
-    await signOut();
-    setUser(null);
-    setIsLogged(false);
-
-    navigate.push("/");
-  };
+  
 
  const getProfilePictureUrl = async (fileId: string) => {
     try {
-      // Use getFileView to get the actual file URL for the image
       const file = await storage.getFileView(appwriteConfig.storageId, fileId);
-      setPicUrl(file.href); // Set the image URL for rendering
+      setPicUrl(file.href);
       return file.href;
     } catch (error) {
       console.error("Error fetching profile picture URL:", error);

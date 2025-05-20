@@ -27,7 +27,6 @@ userId : '';
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -43,7 +42,6 @@ report : '',
 location : '',
 userId : user?.$id
    })
-
    const handleClick = (category: string, color: string) => {
     setform((prev) => ({
       ...prev,
@@ -241,7 +239,7 @@ Add Media
       <option value="Adetowun Ogunsheye Hall">Adetowun Ogunsheye Hall</option>
     </select>
     <div className='ml-auto'>
-    <button
+    <button 
                 className='cursor-pointer font-[600] bg-secondary rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-primary1'
                 onClick={submit}
              >
