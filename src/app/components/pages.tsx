@@ -38,6 +38,7 @@ report : post.report,
 descripton : post.description,
 username : post.creator.username,
 thumbnail : post.thumbnail
+
           };
         }
 
@@ -146,7 +147,7 @@ thumbnail : post.thumbnail
           </div>
            <div className=' bg-primary1 border-b- border-primary1 flex-col gap-[1.5rem] p-[1rem] rounded-3xl lg:w-[300px] w-[250px]'>
           <div className='flex flex-row justify-between items-center '>
-          <h3 className='font-[500] text-secondary lg:text-[15px] text-[14px]'>Author-{post?.creator?.username}</h3>
+          <h3 className='font-[500] text-secondary lg:text-[15px] text-[14px]'>Author-{post?.username}</h3>
           <h3 className='font-[500] text-secondary lg:text-[15px] text-[14px]'>{formatTime(post?.time)}</h3>
           </div>
  <div className='flex items-center gap-[0.5rem]'>
