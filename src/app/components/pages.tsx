@@ -167,7 +167,7 @@ thumbnail : post.thumbnail
 </div>
   <div className="flex ml-auto">
                         <button
-                          className="text-primary2 font-[600] text-[17px] p-[1rem] border border-primary1 rounded-2xl bg-primary1"
+                          className="text-primary2 font-[600] text-[14px] lg:text-[17px] px-[1rem] py-[0.5rem]  border border-primary1 rounded-2xl bg-primary1"
                           onClick={handleShare}
                         >
                           Share
