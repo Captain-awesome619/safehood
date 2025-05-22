@@ -16,8 +16,7 @@ import star from '../../assets/verified.svg'
 interface Props {
   user: any;
   id: string;
-  pic: string;
-}
+  pic: string;}
 
 const Profile = ({ user, id, pic }: Props) => {
   const [file, setFile] = useState<File | null>(null);
@@ -91,7 +90,7 @@ const Profile = ({ user, id, pic }: Props) => {
         }
       );
       window.location.reload()
-      setFile(null); // Reset file input
+      setFile(null); 
       alert("Profile picture uploaded successfully!");
     } catch (error) {
       console.error(error);

@@ -6,13 +6,14 @@ import * as L from 'leaflet';
 import useAppwrite from '../lib/useappwrite';
 import { getAllPosts } from '../lib/appwrite';
 import { uiLocations } from './coordinates';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
+import star from '../../assets/verified.svg'
 
 const LiveFeed1 = () => {
   const uiCenter: [number, number] = [7.4418, 3.9003];
   const { data: posts } = useAppwrite(getAllPosts);
   const [mappedPosts, setMappedPosts] = useState<any[]>([]);
-
+const [data, setData] = useState<any[]>([]);
   const uiBounds = L.latLngBounds(
     [7.4380, 3.8950], // Southwest
     [7.4450, 3.9050]  // Northeast
@@ -31,7 +32,12 @@ const LiveFeed1 = () => {
             coords: uiLocations[normalizedLocation],
             location: post.location,
             category: post.category,
-            color: post.color
+            color: post.color,
+            time : post.$createdAt,
+report : post.report,
+descripton : post.description,
+username : post.creator.username,
+thumbnail : post.thumbnail
           };
         }
 
@@ -67,6 +73,32 @@ const LiveFeed1 = () => {
     });
   };
 
+
+    const formatTime = (datetime :string) => {
+    return new Date(datetime).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+  };
+
+  const handleShare = async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'My Page Title',
+            text: 'Check out this page!',
+            url: window.location.href,  // or specify a specific URL
+          });
+          console.log('Page shared successfully');
+        } catch (error) {
+          console.error('Error sharing the page', error);
+        }
+      } else {
+        alert('Sharing not supported on this browser');
+      }
+    };
+  
   return (
     <div className='w-[100%] h-[90%]'>
       <MapContainer
@@ -83,24 +115,70 @@ const LiveFeed1 = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
+
         {mappedPosts.map((post, index) => (
           <Marker
             key={index}
             position={post.coords}
             icon={createCustomIcon(post.color)}
           >
-            <Popup>
-              <motion.div
-                className="p-2 flex gap-[0.5rem]"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <h4 className='font-[500] text-sm text-primary1'>{post.location}</h4>
-                -
-                <h4 className={`font-[500] text-sm text-${post.color}-500`}>{post.category}</h4>
-              </motion.div>
-            </Popup>
+          
+
+
+             <div aria-description='location card' className='border-[1px]  border-primary1 w-max   p-[1rem]     bg-secondary  rounded-3xl ' >
+                        <Popup className='bg-secondary flex items-center justify-center '>
+              <div className='flex flex-col items-center justify-center gap-[1rem]'>  
+
+<div className='flex flex-col gap-[1rem] border-b-2 border-primary1 pb-[1rem]'>
+<div className='rounded-3xl w-[250px] h-[100px] py-[0.5rem] lg:w-[300px] flex justify-between items-end px-[1rem]' 
+           style={{
+            backgroundImage: `url(${post.thumbnail})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+          >
+  <div className='flex gap-[0.5rem]'>
+  <div className={`w-[15px] h-[15px] rounded-[50%] flex items-center justify-center   ${getColor(post.color)}`}>
+  </div>
+  <h3 className='text-primary2 lg:text-[16px] text-[13px] font-[500]'>{post.category}</h3>
+  </div>
+  <h3 className='text-primary2 lg:text-[16px] text-[13px] font-[500]'>{post.location}</h3>
+          </div>
+           <div className=' bg-primary1 border-b- border-primary1 flex-col gap-[1.5rem] p-[1rem] rounded-3xl lg:w-[300px] w-[250px]'>
+          <div className='flex flex-row justify-between items-center '>
+          <h3 className='font-[500] text-secondary lg:text-[15px] text-[14px]'>Author-{post?.creator?.username}</h3>
+          <h3 className='font-[500] text-secondary lg:text-[15px] text-[14px]'>{formatTime(post?.time)}</h3>
+          </div>
+ <div className='flex items-center gap-[0.5rem]'>
+          <h2 className='font-[600] text-secondary lg:text-[20px] text-[16px]'>{post.description}</h2>
+            {post.verified === true ?
+      <Image
+      src={star}
+      height={20}
+      width={20}
+      alt='verified'
+      />
+    :  
+    ''}
+</div>
+          <h4 className='font-[400] text-secondary lg:text-[17px] text-[14px]'>{post.report}</h4>
+          </div>
+</div>
+  <div className="flex ml-auto">
+                        <button
+                          className="text-primary2 font-[600] text-[17px] p-[1rem] border border-primary1 rounded-2xl bg-primary1"
+                          onClick={handleShare}
+                        >
+                          Share
+                        </button>
+                      </div>
+</div> 
+                     </Popup>   
+                  </div>
+
+
+
+           
           </Marker>
         ))}
       </MapContainer>

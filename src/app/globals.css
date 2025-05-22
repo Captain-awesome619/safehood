@@ -31,6 +31,14 @@
   }
 }
 
+.leaflet-popup-content-wrapper {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 16px !important; /* ✅ Add your desired radius here */
+}
+
 body {
   @apply font-sans;
 
