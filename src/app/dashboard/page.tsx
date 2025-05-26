@@ -97,6 +97,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
      width={50}
      alt="logo"
      className="lg:w-[200px] lg:h-[100px] w-[100px] h-[50px]"
+     onClick={()=>setActivePage('Profile')}
      />
           <IoMdClose size={30} onClick={() => setSidebarOpen(false)} className='text-primary1' />
         </div>
@@ -138,6 +139,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
       src={PicUrl}
       alt='avatar'
       className='lg:w-[40px] lg:h-[40px] w-[30px] h-[30px] rounded-[50%] items-center justify-center'
+      onClick={()=>setActivePage('Profile')}
     />
   ) : <ClipLoader size={25} className='text-primary1' />
 ) : user?  (
@@ -147,6 +149,7 @@ const [PicUrl, setPicUrl] = useState<string>('');
     src={user.avatar}
     alt='avatar'
     className='lg:w-[50px]  bg-primary1 lg:h-[50px]  rounded-[50%] items-center justify-center '
+       onClick={()=>setActivePage('Profile')}
   />
 ) : <ClipLoader size={25}   className='text-primary1'/>}
           </div>

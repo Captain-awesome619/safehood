@@ -126,7 +126,7 @@ userId : user?.$id
      </div>
      <div className='flex gap-[1.5rem] items-center '>  
      <div className='h-[20px] w-[20px] bg-yellow-500 shadow-[0_0_10px_4px_rgba(234,179,8,0.6)] rounded-[50%]'>  </div>
-     <h2 className='text-[20px] lg:text-[30px] text-primary2 font-[600] cursor-pointer' onClick={() => handleClick('Suspicious Activity', 'yellow')}>Susupicious Activity</h2>
+     <h2 className='text-[20px] lg:text-[30px] text-primary2 font-[600] cursor-pointer' onClick={() => handleClick('Suspicious Activity', 'yellow')}>Suspicious Activity</h2>
      </div>
      <div className='flex gap-[1.5rem] items-center '>  
      <div className='h-[20px] w-[20px] bg-pink-500 shadow-[0_0_10px_4px_rgba(236,72,153,0.6)] rounded-[50%]'>  </div>
