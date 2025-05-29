@@ -122,7 +122,7 @@ userId : user?.$id
 
   return (
     <div className='grid gap-[2rem]'>
-{console.log(form.thumbnail)}
+
      <h3 className='lg:text-[30px] text-[27px] text-primary1 font-[600]'>
      Make a Report
      </h3>

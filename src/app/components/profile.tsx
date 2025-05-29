@@ -369,7 +369,7 @@ const Profile = ({ user, id, pic }: Props) => {
       </div>
 
       <div  className='lg:h-[200px] lg:w-[100%] w-[100%] h-[130px]' style={{
-        backgroundImage: `url(${post?.thumbnail})`,
+        backgroundImage: `url(${post?.thumbnail[0]})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
        
