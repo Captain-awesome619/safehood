@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import * as L from 'leaflet';
@@ -14,6 +14,9 @@ const LiveFeed1 = () => {
   const { data: posts } = useAppwrite(getAllPosts);
   const [mappedPosts, setMappedPosts] = useState<any[]>([]);
 const [data, setData] = useState<any[]>([]);
+const [selectedImage, setSelectedImage] = useState<string | null>(null);
+const fullscreenRef = useRef<HTMLDivElement | null>(null);
+const [openDialogId, setOpenDialogId] = useState<string | null>(null);
   const uiBounds = L.latLngBounds(
     [7.4380, 3.8950], // Southwest
     [7.4450, 3.9050]  // Northeast
@@ -100,16 +103,22 @@ thumbnail : post.thumbnail
       }
     };
   
+
+     useEffect(() => {
+      if (!openDialogId) {
+        setSelectedImage(null);
+      }
+    }, [openDialogId]);
   return (
-    <div className='w-[100%] h-[90%]'>
+    <div className='w-[100%] h-[100%]'>
       <MapContainer
         center={uiCenter}
         zoom={17}
         scrollWheelZoom={true}
         style={{ height: '100%', width: '100%', zIndex: '2' }}
         maxBounds={[[7.4300, 3.8900], [7.4500, 3.9150]]}
-        maxBoundsViscosity={1.0}
-        dragging
+       
+        dragging={true}
       >
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
@@ -123,28 +132,87 @@ thumbnail : post.thumbnail
             position={post.coords}
             icon={createCustomIcon(post.color)}
           >
-          
+        
 
 
              <div aria-description='location card' className='border-[1px]  border-primary1 w-max   p-[1rem]     bg-secondary  rounded-3xl ' >
-                        <Popup className='bg-secondary flex items-center justify-center '>
+                        <Popup className='bg-secondary flex items-center justify-center p-[1rem]'>
               <div className='flex flex-col items-center justify-center gap-[1rem]'>  
 
 <div className='flex flex-col gap-[1rem] border-b-2 border-primary1 pb-[1rem]'>
-<div className='rounded-3xl w-[250px] h-[100px] py-[0.5rem] lg:w-[300px] flex justify-between items-end px-[1rem]' 
-           style={{
-            backgroundImage: `url(${post.thumbnail})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
-          >
-  <div className='flex gap-[0.5rem]'>
-  <div className={`w-[15px] h-[15px] rounded-[50%] flex items-center justify-center   ${getColor(post.color)}`}>
+ <div className="flex flex-col gap-2">
+
+  {/* Top two images side by side with dividing line */}
+  <div className="flex w-full  flex-col gap-[1rem]">
+  {/* Top two images */}
+  <div className="flex flex-row w-full gap-[1rem]">
+    {/* First image */}
+    {post.thumbnail[0] && (
+      <div
+       onClick={() => setSelectedImage(post.thumbnail[0])}
+        className="flex-1 w-[100px] h-[150px] rounded-2xl bg-cover bg-center"
+        style={{ backgroundImage: `url(${post.thumbnail[0]})` }}
+      />
+    )}
+
+    {/* Divider line */}
+    {post.thumbnail[1] && (
+    <div className="hidden sm:block w-[2px] bg-primary1 rounded-xl" />
+    )}
+    {/* Second image */}
+    {post.thumbnail[1] && (
+      <div
+       onClick={() => setSelectedImage(post.thumbnail[1])}
+        className=" w-[100%] flex-1 h-[150px] rounded-2xl bg-cover bg-center"
+        style={{ backgroundImage: `url(${post.thumbnail[1]})` }}
+      />
+    )}
   </div>
-  <h3 className='text-primary2 lg:text-[16px] text-[13px] font-[500]'>{post.category}</h3>
-  </div>
-  <h3 className='text-primary2 lg:text-[16px] text-[13px] font-[500]'>{post.location}</h3>
-          </div>
+
+  {/* Bottom image spanning full width */}
+  {post.thumbnail[2] && (
+    <div className=' flex items-center justify-center'>
+    <div
+     onClick={() => setSelectedImage(post.thumbnail[2])}
+      className=" w-[200px] lg:w-[200px] h-[150px]  rounded-2xl bg-cover bg-center"
+      style={{ backgroundImage: `url(${post.thumbnail[2]})` }}
+    />
+    </div>
+  )}
+</div>
+
+
+
+ {selectedImage && (
+    <div
+      className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
+      onClick={() => setSelectedImage(null)}
+      ref={fullscreenRef}
+    >
+      <img
+        src={selectedImage}
+        alt="Fullscreen"
+        className="max-w-full max-h-full rounded-xl"
+      />
+      <button
+        className="absolute top-4 right-4 text-white text-3xl font-bold"
+        onClick={() => setSelectedImage(null)}
+      >
+        &times;
+      </button>
+    </div>
+  )}
+ <div className='flex justify-between '>
+ <div className="flex gap-[0.5rem]">
+                            <div className={`w-[22px] h-[22px] rounded-full ${getColor(post.color)}`} />
+                            <h3 className="text-primary1 lg:text-[18px] text-[15px] font-[500]">{post.category}</h3>
+                          </div>
+                          
+                          <h3 className="text-primary1 lg:text-[18px] text-[15px] font-[500]">{post.location}</h3>
+                        </div>
+</div>
+ 
+
            <div className=' bg-primary1 border-b- border-primary1 flex-col gap-[1.5rem] p-[1rem] rounded-3xl lg:w-[300px] w-[250px]'>
           <div className='flex flex-row justify-between items-center '>
           <h3 className='font-[500] text-secondary lg:text-[15px] text-[14px]'>Author-{post?.username}</h3>
@@ -176,6 +244,7 @@ thumbnail : post.thumbnail
 </div> 
                      </Popup>   
                   </div>
+
 
 
 

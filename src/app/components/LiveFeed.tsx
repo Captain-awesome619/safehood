@@ -8,7 +8,7 @@ const ClientMap = dynamic(() => import('@/app/components/pages'), {
 });
 const LiveFeed = () => {
   return (
-    <div className=" w-[100%] h-[90%]">
+    <div className=" w-[100%] h-[100%]">
  <ClientMap />
    </div>
 

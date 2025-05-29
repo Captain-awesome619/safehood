@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import useAppwrite from '../lib/useappwrite';
 import { getAllPosts, storage, appwriteConfig } from '../lib/appwrite';
 import Image from 'next/image';
@@ -11,8 +11,11 @@ const Feed = () => {
   const { data: posts } = useAppwrite(getAllPosts);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
-  const [pic, setpic] = useState<any[]>([]);
+ const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [pictureUrls, setPictureUrls] = useState<Record<string, string>>({});
+const [selectedImage, setSelectedImage] = useState<string | null>(null);
+const fullscreenRef = useRef<HTMLDivElement | null>(null);
+const [openDialogId, setOpenDialogId] = useState<string | null>(null);
 
   const getCreatorPicture = async (pictureId: string, postId: string) => {
     try {
@@ -86,8 +89,13 @@ const Feed = () => {
     }
   };
 
+  useEffect(() => {
+  if (!openDialogId) {
+    setSelectedImage(null);
+  }
+}, [openDialogId]);
   return (
-    <div className="grid gap-[2rem]">
+    <div className="grid gap-[2rem]" >
       <h2 className="text-[35px] font-[600] text-primary1">Live Reports Feed</h2>
 
       {isLoading ? (
@@ -97,7 +105,9 @@ const Feed = () => {
           {data.length > 0 ? (
             <div className="grid gap-[1rem]">
               {data.map((post: any, index: number) => (
-                <Dialog.Root key={post.$id || index}>
+                <Dialog.Root  key={post.$id || index}
+  open={openDialogId === post.$id}
+  onOpenChange={(open) => setOpenDialogId(open ? post.$id : null)}>
                   <Dialog.Trigger asChild>
                     <div className="cursor-pointer lg:w-[700px] grid gap-[1rem] px-[1.5rem] lg:px-[3rem] py-[2rem] bg-primary1 rounded-3xl">
                       <h3 className="text-secondary lg:text-[18px] text-[17px] font-[400]">{post.category}</h3>
@@ -149,25 +159,83 @@ const Feed = () => {
                     transition={{ duration: 0.5 }}
                   >
                     <Dialog.Content
-                      className="z-[60] border border-primary1 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary rounded-3xl p-[1rem] flex flex-col items-center justify-center gap-[1rem]"
+                      className="z-[60] border  border-primary1 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary rounded-3xl p-[1rem] flex flex-col items-center justify-center gap-[1rem]"
                     >
                       <Dialog.Title className="hidden">Settings</Dialog.Title>
-                      <div className="flex flex-col gap-[1rem] pb-[1rem] border-b border-primary1 w-full items-center">
-                        <div
-                          className="rounded-3xl w-[350px] h-[200px] py-[0.5rem] lg:w-[400px] flex justify-between items-end px-[1rem]"
-                          style={{
-                            backgroundImage: `url(${post.thumbnail})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                          }}
-                        >
-                          <div className="flex gap-[0.5rem]">
-                            <div className={`w-[22px] h-[22px] rounded-full ${getColor(post.color)}`} />
-                            <h3 className="text-primary2 lg:text-[18px] text-[15px] font-[500]">{post.category}</h3>
-                          </div>
-                          <h3 className="text-primary2 lg:text-[18px] text-[15px] font-[500]">{post.location}</h3>
-                        </div>
 
+                      <div className="flex flex-col gap-[1rem] pb-[1rem] border-b border-primary1 w-full items-center">
+                        <div className="flex flex-col gap-2">
+
+  {/* Top two images side by side with dividing line */}
+  <div className="flex w-full  flex-col gap-[1rem]">
+  {/* Top two images */}
+  <div className="flex flex-row w-full gap-[1rem]">
+    {/* First image */}
+    {post.thumbnail[0] && (
+      <div
+       onClick={() => setSelectedImage(post.thumbnail[0])}
+        className="flex-1 w-[350px] h-[200px] rounded-2xl bg-cover bg-center"
+        style={{ backgroundImage: `url(${post.thumbnail[0]})` }}
+      />
+    )}
+
+    {/* Divider line */}
+    {post.thumbnail[1] && (
+    <div className="hidden sm:block w-[2px] bg-primary1 rounded-xl" />
+    )}
+    {/* Second image */}
+    {post.thumbnail[1] && (
+      <div
+       onClick={() => setSelectedImage(post.thumbnail[1])}
+        className=" w-[100%] flex-1 h-[200px] rounded-2xl bg-cover bg-center"
+        style={{ backgroundImage: `url(${post.thumbnail[1]})` }}
+      />
+    )}
+  </div>
+
+  {/* Bottom image spanning full width */}
+  {post.thumbnail[2] && (
+    <div
+     onClick={() => setSelectedImage(post.thumbnail[2])}
+      className=" w-[350px] lg:w-[400px] h-[200px] rounded-2xl bg-cover bg-center"
+      style={{ backgroundImage: `url(${post.thumbnail[2]})` }}
+    />
+  )}
+</div>
+
+
+
+ {selectedImage && (
+    <div
+      className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
+      onClick={() => setSelectedImage(null)}
+      ref={fullscreenRef}
+    >
+      <img
+        src={selectedImage}
+        alt="Fullscreen"
+        className="max-w-full max-h-full rounded-xl"
+      />
+      <button
+        className="absolute top-4 right-4 text-white text-3xl font-bold"
+        onClick={() => setSelectedImage(null)}
+      >
+        &times;
+      </button>
+    </div>
+  )}
+ <div className='flex justify-between '>
+ <div className="flex gap-[0.5rem]">
+                            <div className={`w-[22px] h-[22px] rounded-full ${getColor(post.color)}`} />
+                            <h3 className="text-primary1 lg:text-[18px] text-[15px] font-[500]">{post.category}</h3>
+                          </div>
+                          
+                          <h3 className="text-primary1 lg:text-[18px] text-[15px] font-[500]">{post.location}</h3>
+                        </div>
+</div>
+ 
+
+ 
                         <div className="bg-primary1 p-[1rem] rounded-3xl lg:w-[400px] w-[350px]">
                           <div className="flex justify-between items-center mb-2">
                             <h3 className="font-[500] text-secondary lg:text-[17px] text-[14px]">Author - {post?.creator?.username}</h3>

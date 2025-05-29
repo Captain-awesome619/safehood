@@ -14,7 +14,7 @@ const Report = () => {
   interface FormState {
     category: string; 
     color: string;
-    thumbnail: File | null;
+    thumbnail: File[];
 description : string;
 report : string;
 location : string;
@@ -27,16 +27,25 @@ userId : '';
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setform((prev:FormState) => ({ ...prev, thumbnail : file }));
-    }
-  };
+
+const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const files = event.target.files;
+  if (files) {
+    const newFiles = Array.from(files).slice(0, 3);
+    setform((prev) => {
+      const combinedFiles = [...prev.thumbnail, ...newFiles].slice(0, 3);
+      return { ...prev, thumbnail: combinedFiles };
+    });
+  }
+  // Reset input so user can select same file again if needed
+  event.target.value = '';
+};
+
+
   const [form, setform] = useState<FormState>({ 
     category: '', 
     color: '',
-thumbnail: null,
+thumbnail: [],
 description : '',
 report : '',
 location : '',
@@ -60,52 +69,60 @@ userId : user?.$id
     const { name, value } = e.target;
     setform((prev) => ({ ...prev, [name]: value }));
   };
-  const submit = async () => {
-    if (
-      form.color === '' ||
-      form.category === '' ||
-      form.description === '' ||
-      form.thumbnail === null ||
-      form.report === '' ||
-      form.location === ''
-    ) {
-      alert('Error: Please fill in all fields');
-      return;
-    }
   
-    setUploading(true);
-  
-    try {
-      console.log('Started');
-  
-      // 1. Upload thumbnail to Appwrite Storage
-      const uploadedFile = await storage.createFile(
-        appwriteConfig.storageId,
-        ID.unique(),
-        form.thumbnail
-      );
-  
-      // 2. Get the preview URL for the uploaded file
-      const thumbnailUrl = storage.getFileView(appwriteConfig.storageId, uploadedFile.$id).href;
-  
-      // 3. Create the post with the image URL
-      const result = await createPost({
-        ...form,
-      },thumbnailUrl );
-  console.log(result)
-      alert('Post uploaded successfully');
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
-      alert('There was an error uploading your post');
-    } finally {
-      setUploading(false);
-    }
-  };
-  
+ const submit = async () => {
+  if (
+    form.color === '' ||
+    form.category === '' ||
+    form.description === '' ||
+    form.thumbnail.length === 0 ||
+    form.report === '' ||
+    form.location === ''
+  ) {
+    alert('Error: Please fill in all fields');
+    return;
+  }
+
+  setUploading(true);
+
+  try {
+    console.log('Started uploading...');
+
+    // 1. Upload each thumbnail and get the URLs
+    const uploadedThumbnailUrls = await Promise.all(
+      form.thumbnail.map(async (file) => {
+        const uploadedFile = await storage.createFile(
+          appwriteConfig.storageId,
+          ID.unique(),
+          file
+        );
+        return storage.getFileView(appwriteConfig.storageId, uploadedFile.$id).href;
+      })
+    );
+
+    // 2. Create the post with the array of image URLs
+   const result = await createPost(
+  {
+    ...form,
+  },
+  uploadedThumbnailUrls // ✅ This is the second required argument
+);
+
+
+    console.log(result);
+    alert('Post uploaded successfully');
+    window.location.reload();
+  } catch (error) {
+    console.log(error);
+    alert('There was an error uploading your post');
+  } finally {
+    setUploading(false);
+  }
+};
+
   return (
     <div className='grid gap-[2rem]'>
-
+{console.log(form.thumbnail)}
      <h3 className='lg:text-[30px] text-[27px] text-primary1 font-[600]'>
      Make a Report
      </h3>
@@ -163,13 +180,19 @@ userId : user?.$id
     value={form.report}
     onChange={handleChange}
  ></textarea>
- {form.thumbnail && (
+ {form.thumbnail.length && (
         <h3 className="mt-4 text-lg font-medium text-secondary">
-          Selected File: {form.thumbnail.name}
+          Selected File: <ul className="list-disc list-inside">
+      {form.thumbnail.map((file, index) => (
+        <li key={index}>{file.name}</li>
+      ))}
+    </ul>
         </h3>
       )}
        <input
         type="file"
+          accept="image/*"
+        multiple
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"
