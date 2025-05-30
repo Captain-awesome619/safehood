@@ -78,13 +78,15 @@ thumbnail : post.thumbnail
   };
 
 
-    const formatTime = (datetime :string) => {
-    return new Date(datetime).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
-  };
+  const formatTime = (datetime: string) =>
+  new Date(datetime).toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'short', // e.g., Jan, Feb — you can use 'long' for full names
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
 
   const handleShare = async () => {
       if (navigator.share) {

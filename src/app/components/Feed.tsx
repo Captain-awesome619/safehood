@@ -55,12 +55,15 @@ const [openDialogId, setOpenDialogId] = useState<string | null>(null);
     }
   }, [posts]);
 
-  const formatTime = (datetime: string) =>
-    new Date(datetime).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
+const formatTime = (datetime: string) =>
+  new Date(datetime).toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'short', // e.g., Jan, Feb — you can use 'long' for full names
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
 
   const getColor = (category: string) => {
     switch (category.toLowerCase()) {
