@@ -167,14 +167,14 @@ const [openDialogId, setOpenDialogId] = useState<string | null>(null);
                         <div className="flex flex-col gap-2">
 
   {/* Top two images side by side with dividing line */}
-  <div className="flex w-full  flex-col gap-[1rem]">
+  <div className="flex w-full  flex-col gap-[0.5rem] lg:gap-[1rem]">
   {/* Top two images */}
-  <div className="flex flex-row w-full gap-[1rem]">
+  <div className="flex flex-row w-full gap-[0.5rem] lg:gap-[1rem]">
     {/* First image */}
     {post.thumbnail[0] && (
       <div
        onClick={() => setSelectedImage(post.thumbnail[0])}
-        className="flex-1 w-[350px] h-[200px] rounded-2xl bg-cover bg-center"
+        className="flex-1 w-[350px] h-[170px] lg:h-[200px] rounded-2xl bg-cover bg-center"
         style={{ backgroundImage: `url(${post.thumbnail[0]})` }}
       />
     )}
@@ -187,7 +187,7 @@ const [openDialogId, setOpenDialogId] = useState<string | null>(null);
     {post.thumbnail[1] && (
       <div
        onClick={() => setSelectedImage(post.thumbnail[1])}
-        className=" w-[100%] flex-1 h-[200px] rounded-2xl bg-cover bg-center"
+        className=" w-[100%] flex-1 h-[170px] lg:h-[200px] rounded-2xl bg-cover bg-center"
         style={{ backgroundImage: `url(${post.thumbnail[1]})` }}
       />
     )}
@@ -197,7 +197,7 @@ const [openDialogId, setOpenDialogId] = useState<string | null>(null);
   {post.thumbnail[2] && (
     <div
      onClick={() => setSelectedImage(post.thumbnail[2])}
-      className=" w-[350px] lg:w-[400px] h-[200px] rounded-2xl bg-cover bg-center"
+      className=" w-[350px] lg:w-[400px] h-[150px] rounded-2xl bg-cover bg-center"
       style={{ backgroundImage: `url(${post.thumbnail[2]})` }}
     />
   )}
