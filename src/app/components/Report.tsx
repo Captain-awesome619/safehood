@@ -204,7 +204,7 @@ userId : user?.$id
     <button className='bg-transparent border-0 text-[20px] lg:text-[25px] font-[600] opacity-[0.6] text-secondary cursor-pointer'  onClick={handleButtonClick}>
 Add Media
     </button>
-    <h4 className='text-[13px] text-primary1 font-[600]'>(maximum of 3 pictures)</h4>
+    <h4 className='text-[13px] text-secondary font-[600]'>(maximum of 3 pictures)</h4>
     </div>
     <div>
     <button
