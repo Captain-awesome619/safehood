@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import Image from "next/image";
 import logo from '../assets/logo.svg'
 import info from '../assets/informationsafetybacked.svg'
@@ -10,17 +10,21 @@ import { useRouter } from 'next/navigation';
 import { useGlobalContext } from './context/GlobalProvider';
 import { createUser, getCurrentUser, signIn } from './lib/appwrite';
 import { ClipLoader } from 'react-spinners';
+import { FaCloudDownloadAlt } from "react-icons/fa";
 export default function Home() {
   const navigate = useRouter()
   const [count, setCount] = useState<boolean>(false);
   const { loading, isLogged,setUser,setIsLogged,user } = useGlobalContext()
   const [isSubmitting, setSubmitting] = useState(false);;
   
+ 
   interface FormState {
     username: string;
     email: string;
     password: string;
     confirmpassword : string
+    category : string
+    categoryid : any
   }
   interface FormState2 {
    
@@ -33,6 +37,8 @@ export default function Home() {
     email: "",
     password: "",
     confirmpassword: "",
+    category : "",
+    categoryid : null
   });
   const [form2, setForm2] = useState<FormState2>({
    
@@ -51,6 +57,20 @@ export default function Home() {
     email: '',
     password: '',
   });
+
+const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setForm({ ...form, categoryid: e.target.files[0] });
+    }
+  };
+
 
   const validateAllFields2 = () => {
     setErrors2({
@@ -143,7 +163,11 @@ export default function Home() {
     }
   }, [isLogged,loading]); 
 
-  
+  const categories = ['Student', 'Resident', 'Staff'];
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm({ ...form, category: e.target.value });
+  };
   
  
 
@@ -212,7 +236,7 @@ Information<br></br> Backed<br></br> Safety.
      >
      { count === false ?
        
-     <Dialog.Content aria-description='form' className='  h-max p-[2rem] lg:p-[3rem]   fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex flex-col items-center justify-center gap-[1.5rem] bg-secondary  rounded-3xl ' >
+     <Dialog.Content aria-description='form' className='  h-max p-[2rem] lg:py-[1rem] lg:px-[3rem]   fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex flex-col items-center justify-center gap-[1.5rem] bg-secondary  rounded-3xl ' >
      
           <Dialog.Title className='hidden'>Settings</Dialog.Title>
      <div className='flex flex-col gap-[0.5rem] py-[0.5rem] lg:py-0'>
@@ -239,6 +263,64 @@ Information<br></br> Backed<br></br> Safety.
           />
              {errors.username && <p className='text-red-500 text-sm'>{errors.username}</p>}
         </div>
+
+<div className='grid gap-[0.5rem]'>
+  <h2 className='text-[14px] lg:text-[16px] text-primary1 font-[500]'>Select your category</h2>
+  <div className="flex gap-[2rem]">
+    {categories.map((cat) => (
+      <label key={cat} className="flex items-center gap-2 text-primary1">
+        <input
+          type="radio"
+          name="category"
+          value={cat}
+          checked={form.category === cat}
+          onChange={handleCategoryChange}
+          className='text-primary1 cursor-pointer'
+        />
+        {cat}
+      </label>
+    ))}
+  </div>
+</div>
+
+{
+  form.category ?
+    <div className=' border-[2px]  flex flex-col gap-[0.5rem] lg:gap-[1rem] rounded-3xl border-primary1'>
+       <div className='p-[1rem] flex flex-col gap-[0.5remrem] items-center justify-center'> 
+        <FaCloudDownloadAlt size={30} className='text-primary1' />
+        <div>
+          {form.category === 'Student' ? <h4 className='text-[13px] font-[600px] text-primary1'>Please upload a clear picture of your student id card</h4>
+        :
+        ''  
+        }
+          {form.category === 'Resident' ? <h4 className='text-[13px] font-[600px] text-primary1'>Please upload a clear picture of  your recent Tenancy Bill</h4>
+        :
+        ''  
+        }
+          {form.category === 'Staff' ? <h4 className='text-[13px] font-[600px] text-primary1'>Please upload a clear picture of your ID</h4>
+        :
+        ''  
+        }
+        </div>
+        </div>  
+  <div className='flex items-center justify-center pb-[0.5rem]'>
+     <input
+        type="file"
+          accept="image/*"
+        multiple
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        className="hidden"
+      />
+<button className='px-[2rem] py-[0.5rem] cursor-pointer rounded-2xl bg-primary1 text-secondary'
+ onClick={handleButtonClick}
+>Upload
+</button>
+    </div>
+    </div>
+    :
+    ''
+}
 
         <div>
           <input
