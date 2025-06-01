@@ -154,7 +154,7 @@ verified : post.verified
     {post.thumbnail[0] && (
       <div
        onClick={() => setSelectedImage(post.thumbnail[0])}
-        className="flex-1 w-[100px] h-[150px] rounded-2xl bg-cover bg-center"
+        className="flex-1 w-[100px] h-[120px] lg:h-[150px]  rounded-2xl bg-cover bg-center"
         style={{ backgroundImage: `url(${post.thumbnail[0]})` }}
       />
     )}
@@ -167,7 +167,7 @@ verified : post.verified
     {post.thumbnail[1] && (
       <div
        onClick={() => setSelectedImage(post.thumbnail[1])}
-        className=" w-[100%] flex-1 h-[150px] rounded-2xl bg-cover bg-center"
+        className=" w-[100%] flex-1 h-[120px] lg:h-[150px] rounded-2xl bg-cover bg-center"
         style={{ backgroundImage: `url(${post.thumbnail[1]})` }}
       />
     )}
@@ -178,7 +178,7 @@ verified : post.verified
     <div className=' flex items-center justify-center'>
     <div
      onClick={() => setSelectedImage(post.thumbnail[2])}
-      className=" w-[250px] lg:w-[300px] h-[150px]  rounded-2xl bg-cover bg-center"
+      className=" w-[250px] lg:w-[300px] h-[120px] lg:h-[150px]  rounded-2xl bg-cover bg-center"
       style={{ backgroundImage: `url(${post.thumbnail[2]})` }}
     />
     </div>
@@ -206,7 +206,7 @@ verified : post.verified
       </button>
     </div>
   )}
- <div className='flex justify-between '>
+ <div className='flex justify-between w-[110%] lg:w-full'>
  <div className="flex gap-[0.5rem]">
                             <div className={`w-[22px] h-[22px] rounded-full ${getColor(post.color)}`} />
 <div className='flex flex-row items-center'>
@@ -228,7 +228,7 @@ verified : post.verified
 </div>
  
 
-           <div className=' bg-primary1 border-b- border-primary1 flex-col gap-[1.5rem] p-[1rem] rounded-3xl lg:w-[350px] w-[250px]'>
+           <div className=' bg-primary1 border-b- border-primary1 flex-col gap-[0rem] lg:gap-[1.5rem] p-[1rem] rounded-3xl lg:w-[350px] w-[280px]'>
           <div className='flex flex-row justify-between items-center '>
 
          <div className='flex items-center gap-[0.2rem]'>

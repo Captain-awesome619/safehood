@@ -239,7 +239,7 @@ Add Media
             <IoIosArrowRoundBack onClick={()=>setstep(2)} className='text-white cursor-pointer ' size={30} />
               {uploading === true ?
 <div className='flex items-center justify-center'>
-               <ClipLoader size={40} className='text-primary1 flex items-center justify-center' />
+               <ClipLoader size={40} color='white' className='text-primary1 flex items-center justify-center' />
                </div>
                :
                ''
