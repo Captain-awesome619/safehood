@@ -143,7 +143,7 @@ const formatTime = (datetime: string) =>
                         </div>
                         <div className="flex items-center justify-center gap-[0.6rem]">
                           {post.verified && <Image src={star} height={40} width={40} alt="verified" />}
-                          <div className={`w-[22px] h-[22px] rounded-[50%] ${getColor(post.color)}`} />
+                          <div className={`w-[31px] lg:w-[22px] h-[22px] rounded-[50%] ${getColor(post.color)}`} />
                         </div>
                       </div>
                       <div className="bg-secondary rounded-3xl grid gap-[0.2rem] w-[100%] pt-[1rem] lg:pb-[2rem] pb-[2rem] px-[1.5rem] lg:px-[2rem]">
