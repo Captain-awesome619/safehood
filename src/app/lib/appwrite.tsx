@@ -23,19 +23,28 @@ client
  export const storage = new Storage(client);
  export const avatars = new Avatars(client);
  export const databases = new Databases(client);
-export async function createUser(email: string, password: string, username: string) {
+
+export async function createUser(email: string, password: string, username: string, category : string, categoryid : any) {
   console.log(username)
     try {
       const newAccount = await account.create(
         ID.unique(),
         email,
         password,
-        username
+        username,
       );
   
       if (!newAccount) throw Error;
+      
       const avatarUrl = avatars.getInitials(username);
-      await signIn(email, password);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    await signIn(email, password);
+
+      const fileUpload = await storage.createFile(
+      appwriteConfig.storageId,
+      ID.unique(),
+      categoryid
+    );
       const newUser = await databases.createDocument(
         appwriteConfig.databaseId,
         appwriteConfig.userCollectionId,
@@ -45,8 +54,11 @@ export async function createUser(email: string, password: string, username: stri
           email: email,
           username: username,
           avatar: avatarUrl,
+          category: category,
+          categoryid:  fileUpload.$id
         }
       );
+       
       return newUser;
     } catch (error) {
       throw new Error('theres an error');

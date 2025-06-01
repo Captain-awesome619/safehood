@@ -42,6 +42,13 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 
+const handleRemoveImage = (indexToRemove: number) => {
+    setform((prev) => ({
+      ...prev,
+      thumbnail: prev.thumbnail.filter((_, i) => i !== indexToRemove),
+    }));
+  };
+
   const [form, setform] = useState<FormState>({ 
     category: '', 
     color: '',
@@ -181,13 +188,21 @@ userId : user?.$id
     onChange={handleChange}
  ></textarea>
  {form.thumbnail.length && (
-        <h3 className="mt-4 text-lg font-medium text-secondary">
-          Selected File: <ul className="list-disc list-inside">
+        <div className="mt-4 text-lg font-medium text-secondary">
+        {form.thumbnail.length > 1 ?   <h3>Selected Files :</h3>  :  <h3>Selected File :</h3>}  
+          <ul className="list-disc list-inside">
       {form.thumbnail.map((file, index) => (
-        <li key={index}>{file.name}</li>
+ <div key={index} className='flex flex-row items-center  gap-[1.5rem]'>
+        <li  >
+          {file.name}
+          </li>
+        <div onClick={()=>handleRemoveImage(index)} className='text-red-500 font-[700] text-[15px] cursor-pointer' >
+          X
+          </div>
+</div>
       ))}
     </ul>
-        </h3>
+        </div>
       )}
        <input
         type="file"

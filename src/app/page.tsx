@@ -24,7 +24,7 @@ export default function Home() {
     password: string;
     confirmpassword : string
     category : string
-    categoryid : any
+    categoryid :  File | null,
   }
   interface FormState2 {
    
@@ -65,9 +65,10 @@ const fileInputRef = useRef<HTMLInputElement>(null);
   };
 
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setForm({ ...form, categoryid: e.target.files[0] });
+ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setForm((prev:FormState) => ({ ...prev, categoryid : file }));
     }
   };
 
@@ -77,7 +78,7 @@ const fileInputRef = useRef<HTMLInputElement>(null);
       email: !form2.email.includes('@') ? 'Enter your mail' : '',
     
       password:
-        form2.password.length < 8 ? ' Enter your 8 character password' : '',
+        form2.password.length < 8 ? ' Enter your password(it is at least 8 characters)' : '',
     });
   };
   useEffect(() => {
@@ -105,7 +106,7 @@ const fileInputRef = useRef<HTMLInputElement>(null);
 
 
   const submit = async () => {
-    if (form.username === "" || form.email === "" || form.password === "") {
+    if (form.username === "" || form.email === "" || form.password === "" || form.category === "" || form.categoryid === null) {
       alert("Error: Please fill in all fields");
       return; 
     }
@@ -113,12 +114,13 @@ const fileInputRef = useRef<HTMLInputElement>(null);
       setSubmitting(true);
       try {
         console.log('started')
-        const result = await createUser(form.email, form.password, form.username);
+        const result = await createUser(form.email, form.password, form.username, form.category, form.categoryid);
         console.log('here')
         console.log(form);
         console.log(result);
         setUser(result);
         setIsLogged(true);
+        alert('user successfully signed in')
         navigate.push("/dashboard");
       } catch (error) {
         console.log(error);
@@ -175,7 +177,7 @@ const fileInputRef = useRef<HTMLInputElement>(null);
   return (
     
     <div className="lg:grid flex-col  gap-[1.5rem] overflow-x-hidden p-0 pb-[1rem]  lg:px-[2rem] bg-primary1   h-screen  ">
-    
+ 
      <div className="flex justify-between items-center p-[1rem] lg:px-0 pb-[5rem] lg:pb-0  ">
      <div className="lg:pl-[4rem] pl-0   ">
      <Image 
@@ -264,11 +266,11 @@ Information<br></br> Backed<br></br> Safety.
              {errors.username && <p className='text-red-500 text-sm'>{errors.username}</p>}
         </div>
 
-<div className='grid gap-[0.5rem]'>
+<div className='flex flex-col gap-[0.5rem]'>
   <h2 className='text-[14px] lg:text-[16px] text-primary1 font-[500]'>Select your category</h2>
   <div className="flex gap-[2rem]">
     {categories.map((cat) => (
-      <label key={cat} className="flex items-center gap-2 text-primary1">
+      <label key={cat} className="flex items-center gap-2  text-primary1">
         <input
           type="radio"
           name="category"
@@ -285,34 +287,37 @@ Information<br></br> Backed<br></br> Safety.
 
 {
   form.category ?
-    <div className=' border-[2px]  flex flex-col gap-[0.5rem] lg:gap-[1rem] rounded-3xl border-primary1'>
-       <div className='p-[1rem] flex flex-col gap-[0.5remrem] items-center justify-center'> 
+    <div className=' border-[2px]  flex flex-col gap-[0.5rem] lg:gap-[0.5rem] rounded-3xl border-primary1'>
+       <div className='p-[0.5rem] flex flex-col gap-[0.5rem] items-center justify-center'> 
         <FaCloudDownloadAlt size={30} className='text-primary1' />
-        <div>
-          {form.category === 'Student' ? <h4 className='text-[13px] font-[600px] text-primary1'>Please upload a clear picture of your student id card</h4>
+        <div className='w-max'>
+          {form.category === 'Student' ? <h4 className= '  text-[13px] font-[600px] text-primary1'> Upload a clear picture of your student id card</h4>
         :
         ''  
         }
-          {form.category === 'Resident' ? <h4 className='text-[13px] font-[600px] text-primary1'>Please upload a clear picture of  your recent Tenancy Bill</h4>
+          {form.category === 'Resident' ? <h4 className='text-[13px] font-[600px] text-primary1'> Upload a clear picture of a recent Tenancy Bill</h4>
         :
         ''  
         }
-          {form.category === 'Staff' ? <h4 className='text-[13px] font-[600px] text-primary1'>Please upload a clear picture of your ID</h4>
+          {form.category === 'Staff' ? <h4 className='text-[13px] font-[600px] text-primary1'> Upload a clear picture of your ID</h4>
         :
         ''  
         }
         </div>
         </div>  
-  <div className='flex items-center justify-center pb-[0.5rem]'>
+  <div className='flex flex-col items-center justify-center pb-[0.5rem]'>
+     <h3 className=" text-[13px] font-medium text-primary1">
+          Selected File: {form?.categoryid?.name}
+        </h3>
+       
      <input
         type="file"
           accept="image/*"
-        multiple
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"
       />
-<button className='px-[2rem] py-[0.5rem] cursor-pointer rounded-2xl bg-primary1 text-secondary'
+<button className='px-[1.2rem] py-[0.5rem] text-[14px] cursor-pointer rounded-2xl bg-primary1 text-secondary'
  onClick={handleButtonClick}
 >Upload
 </button>
@@ -354,7 +359,7 @@ Information<br></br> Backed<br></br> Safety.
     isFormInvalid ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary1 cursor-pointer'
   }
       `}>
- {isSubmitting ?  <ClipLoader size={25}  className='text-primary1' /> : "Sign up"}
+ {isSubmitting ?  <ClipLoader size={25} color='white'  className='text-primary1' /> : "Sign up"}
      </button>
      <Image 
      src={line}
@@ -362,7 +367,7 @@ Information<br></br> Backed<br></br> Safety.
      width={320}
      alt="logo"
      />
-     <h3 className='text-primary1 font-[500] '>Or already have an account? <span className='text-white cursor-pointer' onClick={Account}>Sign in</span></h3>
+     <h3 className='text-primary1 font-[500] '>Or already have an account? <span className='text-primary1 font-[700] cursor-pointer' onClick={Account}>Sign in</span></h3>
      </Dialog.Content>
    
      :
@@ -389,7 +394,7 @@ height={50}
 width={320}
 alt="logo"
 />
-<h3 className='text-primary1 font-[500]'>Dont have an account? <span className='text-white cursor-pointer' onClick={Account}>Sign up</span></h3>
+<h3 className='text-primary1 font-[500]'>Dont have an account? <span className='text-primary1 font-[700] cursor-pointer' onClick={Account}>Sign up</span></h3>
 
 </Dialog.Content>
 

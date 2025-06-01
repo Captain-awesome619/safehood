@@ -8,6 +8,7 @@ import { getAllPosts } from '../lib/appwrite';
 import { uiLocations } from './coordinates';
 import Image from 'next/image';
 import star from '../../assets/verified.svg'
+import { SiTicktick } from "react-icons/si";
 
 const LiveFeed1 = () => {
   const uiCenter: [number, number] = [7.4418, 3.9003];
@@ -40,8 +41,9 @@ const [openDialogId, setOpenDialogId] = useState<string | null>(null);
 report : post.report,
 descripton : post.description,
 username : post.creator.username,
-thumbnail : post.thumbnail
-
+thumbnail : post.thumbnail,
+veri : post.creator.verified,
+verified : post.verified
           };
         }
 
@@ -145,9 +147,9 @@ thumbnail : post.thumbnail
  <div className="flex flex-col gap-2">
 
   {/* Top two images side by side with dividing line */}
-  <div className="flex w-full  flex-col gap-[1rem]">
+  <div className="flex w-full  flex-col gap-[0.4rem] lg:gap-[0.6rem]">
   {/* Top two images */}
-  <div className="flex flex-row w-full gap-[1rem]">
+  <div className="flex flex-row w-full gap-[0.4rem] lg:gap-[0.6rem]">
     {/* First image */}
     {post.thumbnail[0] && (
       <div
@@ -176,7 +178,7 @@ thumbnail : post.thumbnail
     <div className=' flex items-center justify-center'>
     <div
      onClick={() => setSelectedImage(post.thumbnail[2])}
-      className=" w-[200px] lg:w-[200px] h-[150px]  rounded-2xl bg-cover bg-center"
+      className=" w-[250px] lg:w-[300px] h-[150px]  rounded-2xl bg-cover bg-center"
       style={{ backgroundImage: `url(${post.thumbnail[2]})` }}
     />
     </div>
@@ -207,22 +209,9 @@ thumbnail : post.thumbnail
  <div className='flex justify-between '>
  <div className="flex gap-[0.5rem]">
                             <div className={`w-[22px] h-[22px] rounded-full ${getColor(post.color)}`} />
+<div className='flex flex-row items-center'>
                             <h3 className="text-primary1 lg:text-[18px] text-[15px] font-[500]">{post.category}</h3>
-                          </div>
-                          
-                          <h3 className="text-primary1 lg:text-[18px] text-[15px] font-[500]">{post.location}</h3>
-                        </div>
-</div>
- 
-
-           <div className=' bg-primary1 border-b- border-primary1 flex-col gap-[1.5rem] p-[1rem] rounded-3xl lg:w-[300px] w-[250px]'>
-          <div className='flex flex-row justify-between items-center '>
-          <h3 className='font-[500] text-secondary lg:text-[15px] text-[14px]'>Author-{post?.username}</h3>
-          <h3 className='font-[500] text-secondary lg:text-[15px] text-[14px]'>{formatTime(post?.time)}</h3>
-          </div>
- <div className='flex items-center gap-[0.5rem]'>
-          <h2 className='font-[600] text-secondary lg:text-[20px] text-[16px]'>{post.description}</h2>
-            {post.verified === true ?
+ {post.verified === true ?
       <Image
       src={star}
       height={20}
@@ -231,6 +220,31 @@ thumbnail : post.thumbnail
       />
     :  
     ''}
+</div>
+                          </div>
+                          
+                          <h3 className="text-primary1 lg:text-[18px] text-[15px] font-[500]">{post.location}</h3>
+                        </div>
+</div>
+ 
+
+           <div className=' bg-primary1 border-b- border-primary1 flex-col gap-[1.5rem] p-[1rem] rounded-3xl lg:w-[350px] w-[250px]'>
+          <div className='flex flex-row justify-between items-center '>
+
+         <div className='flex items-center gap-[0.2rem]'>
+                                     <h3 className="text-secondary lg:text-[18px] text-[16px] font-[400]">Author - {post?.username}</h3>
+         { post?.veri === true ?
+                     <SiTicktick size={15} className='text-secondary' />
+         :
+         ""
+                   }
+         </div>
+
+          <h3 className='font-[500] text-secondary lg:text-[15px] text-[14px]'>{formatTime(post?.time)}</h3>
+          </div>
+ <div className='flex items-center gap-[0.5rem]'>
+          <h2 className='font-[600] text-secondary lg:text-[20px] text-[16px]'>{post.description}</h2>
+           
 </div>
           <h4 className='font-[400] text-secondary lg:text-[17px] text-[14px]'>{post.report}</h4>
           </div>

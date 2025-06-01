@@ -6,7 +6,7 @@ import { Dialog } from 'radix-ui';
 import { motion } from 'framer-motion';
 import { ClipLoader } from 'react-spinners';
 import star from '../../assets/verified.svg';
-
+import { SiTicktick } from "react-icons/si";
 const Feed = () => {
   const { data: posts } = useAppwrite(getAllPosts);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -130,7 +130,14 @@ const formatTime = (datetime: string) =>
 />
 
                           <div className="grid">
+ <div className='flex items-center gap-[0.2rem]'>
                             <h3 className="text-secondary lg:text-[18px] text-[16px] font-[400]">Author - {post?.creator?.username}</h3>
+{ post?.creator?.verified === true ?
+            <SiTicktick size={15} className='text-secondary' />
+:
+""
+          }
+</div>
                             <h3 className="text-secondary lg:text-[18px] text-[16px] font-[400] pr-[0.5rem] lg:pr-0">Time - {formatTime(post?.$createdAt)}</h3>
                           </div>
                         </div>
@@ -170,9 +177,9 @@ const formatTime = (datetime: string) =>
                         <div className="flex flex-col gap-2">
 
   {/* Top two images side by side with dividing line */}
-  <div className="flex w-full  flex-col gap-[0.5rem] lg:gap-[1rem]">
+  <div className="flex w-full  flex-col gap-[0.4rem] lg:gap-[0.7rem]">
   {/* Top two images */}
-  <div className="flex flex-row w-full gap-[0.5rem] lg:gap-[1rem]">
+  <div className="flex flex-row w-full gap-[0.4rem] lg:gap-[0.7rem]">
     {/* First image */}
     {post.thumbnail[0] && (
       <div

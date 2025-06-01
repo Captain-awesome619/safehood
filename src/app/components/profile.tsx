@@ -13,6 +13,7 @@ import { Query } from 'appwrite';
 import { updateUsername } from '../lib/appwrite';
 import { IoTrashBin } from "react-icons/io5";
 import star from '../../assets/verified.svg'
+import { SiTicktick } from "react-icons/si";
 interface Props {
   user: any;
   id: string;
@@ -195,7 +196,14 @@ const Profile = ({ user, id, pic }: Props) => {
   />
 ) : <ClipLoader size={25}  className='text-primary1' />}
             </div>
+<div className='flex flex-row gap-[0.3rem] items-center justify-center'>
             <h3 className='font-[600] text-primary2 text-[17px] lg:text-[20px]'>{user?.username}</h3>
+{ user?.verified === true ?
+            <SiTicktick size={15} className='text-secondary' />
+:
+""
+          }
+        </div> 
           </div>
           
           <Dialog.Root>
