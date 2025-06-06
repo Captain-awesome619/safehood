@@ -11,6 +11,8 @@ import { useGlobalContext } from './context/GlobalProvider';
 import { createUser, getCurrentUser, signIn } from './lib/appwrite';
 import { ClipLoader } from 'react-spinners';
 import { FaCloudDownloadAlt } from "react-icons/fa";
+import { FaWhatsappSquare } from "react-icons/fa";
+import { SiGmail } from "react-icons/si";
 export default function Home() {
   const navigate = useRouter()
   const [count, setCount] = useState<boolean>(false);
@@ -190,7 +192,28 @@ const fileInputRef = useRef<HTMLInputElement>(null);
  </div>
      <div className="flex gap-[1rem]  lg:gap-[2rem] justify-center  ">
      <h3 className="lg:text-[24px] text-[17px] cursor-pointer font-[400] text-primary2 duration-500 hover:text-secondary">About</h3>
-     <h3  className="lg:text-[24px] text-[17px] cursor-pointer font-[400] text-primary2 duration-500 hover:text-secondary">Contact</h3>
+  <Dialog.Root>
+    <Dialog.Trigger>
+     <h3  className="lg:text-[24px] text-[17px] cursor-pointer font-[400]  text-primary2 duration-500 hover:text-secondary">Contact</h3>
+
+<Dialog.Overlay >
+     <motion.div
+   className="fixed w-screen inset-0 duration-1000 backdrop-blur-md   "
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.5 }}
+  />
+     </Dialog.Overlay>
+</Dialog.Trigger>
+ <Dialog.Content aria-description='form' className='  h-max p-[2rem] lg:py-[1rem] lg:px-[3rem]   fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex flex-col items-center justify-center gap-[1.5rem] bg-secondary  rounded-3xl ' >
+<Dialog.Title className='hidden'>Settings</Dialog.Title>
+<div className='px-[2rem] py-[1rem] flex flex-row lg:gap-[3rem] gap-[2rem] items-center justify-center'>
+     <a  href="mailto:Anjieroja@gmail.com" target="_blank" rel='noreferrer'><SiGmail   size={25} className=' cursor-pointer '  /> </a>
+ <a href="https://Wa.me/+2347068597323" target="_blank" rel='noreferrer'><FaWhatsappSquare size={25}  className=' cursor-pointer'/></a>
+</div>
+</Dialog.Content>
+</Dialog.Root>
      </div>
      </div>
      <div className="flex lg:flex-row flex-col items-center justify-center ">

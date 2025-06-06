@@ -141,9 +141,9 @@ const formatTime = (datetime: string) =>
                             <h3 className="text-secondary lg:text-[18px] text-[16px] font-[400] pr-[0.5rem] lg:pr-0">Time - {formatTime(post?.$createdAt)}</h3>
                           </div>
                         </div>
-                        <div className="flex items-center justify-center gap-[0.6rem]">
-                          {post.verified && <Image src={star} height={40} width={40} alt="verified" />}
-                          <div className={`w-[31px] lg:w-[22px] h-[22px] rounded-[50%] ${getColor(post.color)}`} />
+                        <div className="flex items-center justify-center gap-[0.2rem]">
+                          {post.verified && <Image src={star} height={20} width={20} alt="verified" />}
+                          <div className={`w-[20px] lg:w-[22px] h-[20px] rounded-[50%] ${getColor(post.color)}`} />
                         </div>
                       </div>
                       <div className="bg-secondary rounded-3xl grid gap-[0.2rem] w-[100%] pt-[1rem] lg:pb-[2rem] pb-[2rem] px-[1.5rem] lg:px-[2rem]">
@@ -152,7 +152,6 @@ const formatTime = (datetime: string) =>
                       </div>
                     </div>
                   </Dialog.Trigger>
-
                   <Dialog.Overlay>
                     <motion.div
                       className="fixed inset-0 z-[50] backdrop-blur-md"
