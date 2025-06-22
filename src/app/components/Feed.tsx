@@ -30,7 +30,6 @@ const [openDialogId, setOpenDialogId] = useState<string | null>(null);
       return "";
     }
   };
-
   useEffect(() => {
     if (posts) {
       setIsLoading(true);

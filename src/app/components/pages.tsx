@@ -26,30 +26,38 @@ const [openDialogId, setOpenDialogId] = useState<string | null>(null);
   useEffect(() => {
     if (!Array.isArray(posts)) return;
 
+const now = new Date();
     const validMarkers = posts
-      .map((post: any) => {
-        const location = post?.location || '';
-        const normalizedLocation = location.toLowerCase().replace(/\s+/g, '');
+       .map((post: any) => {
+    const createdAt = new Date(post?.$createdAt);
+    const ageInMs = now.getTime() - createdAt.getTime();
+    const ageInHours = ageInMs / (1000 * 60 * 60);
 
-        if (uiLocations[normalizedLocation]) {
-          return {
-            coords: uiLocations[normalizedLocation],
-            location: post.location,
-            category: post.category,
-            color: post.color,
-            time : post.$createdAt,
-report : post.report,
-descripton : post.description,
-username : post.creator.username,
-thumbnail : post.thumbnail,
-veri : post.creator.verified,
-verified : post.verified
-          };
-        }
+    if (ageInHours > 48) return null; // ❌ Older than 48 hours
 
-        return null;
-      })
-      .filter(Boolean);
+    const location = post?.location || '';
+    const normalizedLocation = location.toLowerCase().replace(/\s+/g, '');
+
+    if (uiLocations[normalizedLocation]) {
+      return {
+        coords: uiLocations[normalizedLocation],
+        location: post.location,
+        category: post.category,
+        color: post.color,
+        time: post.$createdAt,
+        report: post.report,
+        description: post.description,
+        username: post.creator.username,
+        thumbnail: post.thumbnail,
+        veri: post.creator.verified,
+        verified: post.verified
+      };
+    }
+
+    return null;
+  })
+  .filter(Boolean);
+
 
     setMappedPosts(validMarkers);
   }, [posts]);

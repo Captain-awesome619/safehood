@@ -37,11 +37,8 @@ const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       return { ...prev, thumbnail: combinedFiles };
     });
   }
-  // Reset input so user can select same file again if needed
   event.target.value = '';
 };
-
-
 const handleRemoveImage = (indexToRemove: number) => {
     setform((prev) => ({
       ...prev,
@@ -137,7 +134,7 @@ userId : user?.$id
 { step === 1?
 <div className='grid gap-[2rem]'>
      <h4 className='lg:text-[20px] text-[17px] text-secondary font-[600]'>
-     What are you reporting on?
+     What are you  reporting on?
      </h4>
      <div className='grid gap-[1rem]'>
      <div className='flex gap-[1.5rem] items-center'>  

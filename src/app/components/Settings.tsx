@@ -29,12 +29,14 @@ const [uploading , setUploading] = useState<boolean>(false)
 
 <Dialog.Root >
     <Dialog.Trigger >
+
       <button
                     className='flex items-start cursor-pointer font-[600] bg-primary1 rounded-2xl px-[1rem] lg:px-[1.5rem] py-[0.5rem] text-secondary'
     
                   >
                     {uploading ?  <ClipLoader size={25} color='#CDE0FF'  className='text-white' /> : "Support "}
                   </button>
+                  </Dialog.Trigger>
       
 <Dialog.Overlay >
      <motion.div
@@ -45,7 +47,7 @@ const [uploading , setUploading] = useState<boolean>(false)
     transition={{ duration: 0.5 }}
   />
      </Dialog.Overlay>
-</Dialog.Trigger>
+
  <Dialog.Content aria-description='form' className='  h-max p-[2rem] lg:py-[1rem] lg:px-[3rem]   fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  flex flex-col items-center justify-center gap-[1.5rem] bg-white  rounded-3xl ' >
 <Dialog.Title className='hidden'>Settings</Dialog.Title>
 <div className='px-[2rem] py-[1rem] flex flex-row lg:gap-[3rem] gap-[2rem] items-center justify-center'>
